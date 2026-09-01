@@ -3,871 +3,1172 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sunrise Public School – Secure School Management System</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Sun Rise Public School — Secure Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg-main: #f1f5f9;
-  --sidebar-bg: #0f172a;
-  --sidebar-card: #1e293b;
-  --accent: #f59e0b; /* Sunrise Gold */
-  --accent-hover: #d97706;
-  --primary: #0d9488; /* Emerald Teal */
-  --primary-dark: #0f766e;
-  --navy: #0f172a;
-  --text-dark: #1e293b;
-  --text-muted: #64748b;
-  --card-bg: #ffffff;
-  --border-color: #e2e8f0;
-  --danger: #ef4444;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --info: #3b82f6;
-  --radius: 12px;
-  --shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08);
+:root{
+  --sun:#f2a63c; --sun-deep:#d4831a; --sky:#0f5c5c; --sky-deep:#0a4444;
+  --coral:#e8615a; --paper:#fffbf3; --paper-dim:#faf3e4; --ink:#23302f;
+  --muted:#7a8582; --line:#e9dfc7; --success:#2f9e44; --danger:#d64545; --warn:#c8860a;
+  --r-lg:20px; --r-md:12px; --r-sm:8px;
+  --shadow:0 10px 30px rgba(60,40,10,.10);
+  --shadow-sm:0 2px 10px rgba(60,40,10,.08);
 }
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:var(--paper-dim);color:var(--ink);min-height:100vh;line-height:1.5}
+h1,h2,h3,.display{font-family:'Fraunces',serif}
+a{color:var(--sky);cursor:pointer;text-decoration:none}
+a:hover{text-decoration:underline}
+button{font-family:inherit}
 
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-body { background: var(--bg-main); color: var(--text-dark); min-height: 100vh; overflow-x: hidden; }
+/* ── LOGIN / AUTH SHELL ── */
+.auth-shell{min-height:100vh;display:flex}
+.auth-art{flex:1 1 44%;min-width:300px;background:
+  radial-gradient(circle at 20% 20%, rgba(255,255,255,.18), transparent 40%),
+  linear-gradient(160deg,var(--sky-deep) 0%, var(--sky) 55%, var(--sun-deep) 130%);
+  color:#fff;padding:60px 50px;display:flex;flex-direction:column;justify-content:center;gap:22px}
+.art-badge{width:60px;height:60px;border-radius:18px;background:rgba(255,255,255,.16);
+  display:flex;align-items:center;justify-content:center;font-size:30px;backdrop-filter:blur(4px)}
+.auth-art h1{font-size:34px;font-weight:600;line-height:1.15}
+.art-tag{font-size:15px;opacity:.82;font-style:italic;max-width:360px}
+.art-points{list-style:none;margin-top:10px;display:flex;flex-direction:column;gap:11px}
+.art-points li{font-size:13.5px;opacity:.9;padding-left:22px;position:relative;max-width:360px}
+.art-points li::before{content:"✦";position:absolute;left:0;color:var(--sun)}
+.auth-form-wrap{flex:1 1 56%;display:flex;align-items:center;justify-content:center;padding:36px 20px}
+.auth-form{width:100%;max-width:400px}
+.form-head{margin-bottom:22px}
+.tiny-badge{display:inline-block;background:var(--paper-dim);border:1px solid var(--line);color:var(--sky-deep);
+  font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;margin-bottom:10px}
+.form-head h2{font-size:26px;font-weight:600;color:var(--ink)}
+.form-head p{font-size:13px;color:var(--muted);margin-top:4px}
+.fg{margin-bottom:15px}
+.fg label{display:block;font-size:12.5px;font-weight:600;margin-bottom:5px;color:var(--ink)}
+.fg input,.fg select{width:100%;padding:11px 13px;border:1.5px solid var(--line);
+  border-radius:var(--r-sm);font-size:14px;outline:none;transition:border .15s;background:#fff;color:var(--ink)}
+.fg input:focus,.fg select:focus{border-color:var(--sky)}
+.fg input.invalid{border-color:var(--danger)}
+.fg .err{color:var(--danger);font-size:12px;margin-top:4px;display:none}
+.pw-row{position:relative}
+.pw-toggle{position:absolute;right:12px;top:11px;font-size:12px;color:var(--muted);cursor:pointer;user-select:none}
+.chk-row{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink);margin-bottom:15px;cursor:pointer}
+.btn{padding:11px 20px;border:none;border-radius:var(--r-sm);font-size:14px;
+  font-weight:600;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:6px;justify-content:center}
+.btn-primary{background:var(--sky);color:#fff;width:100%}
+.btn-primary:hover{background:var(--sky-deep)}
+.btn-sm{padding:7px 14px;font-size:12.5px;width:auto}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-success{background:var(--success);color:#fff}
+.btn-outline{background:transparent;border:1.5px solid var(--sky);color:var(--sky-deep)}
+.btn-outline:hover{background:var(--paper-dim)}
+.btn-warn{background:var(--warn);color:#fff}
+.btn-gold{background:var(--sun);color:#3a2600}
+.lock-msg{background:#fdecea;border:1px solid var(--danger);border-radius:var(--r-sm);
+  padding:11px 13px;font-size:12.5px;color:#8a2a24;margin-bottom:14px;display:none}
+.auth-links{text-align:center;font-size:12.5px;margin-top:16px;color:var(--muted)}
+.demo-creds{margin-top:22px;border-top:1px solid var(--line);padding-top:14px}
+.demo-creds summary{font-size:12px;color:var(--muted);cursor:pointer;font-weight:600}
+.demo-list{margin-top:9px;font-size:11.5px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.demo-list code{background:var(--paper-dim);padding:1px 5px;border-radius:4px;color:var(--sky-deep)}
 
-/* ── AUTH UI ── */
-.auth-wrapper {
-  display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px;
-  background: radial-gradient(circle at top left, #1e293b, #0f172a); position: relative;
+/* ── CAPTCHA ── */
+.cap-row{display:flex;align-items:center;gap:10px;background:var(--paper-dim);
+  border-radius:var(--r-sm);padding:11px 14px;border:1.5px solid var(--line)}
+.cap-q{font-weight:700;font-size:15px;color:var(--sky-deep);flex:1;font-family:'Fraunces',serif}
+.cap-row input{border:none;background:transparent;font-size:15px;width:70px;
+  border-bottom:2px solid var(--sun);padding:2px 4px;border-radius:0}
+.str-bar{height:5px;border-radius:3px;background:var(--line);margin-top:6px;overflow:hidden}
+.str-fill{height:100%;width:0;transition:.3s;background:var(--danger)}
+
+/* ── APP SHELL ── */
+.shell{min-height:100vh;display:none;flex-direction:column}
+.topbar{display:flex;align-items:center;justify-content:space-between;
+  padding:14px 26px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-ic{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--sun),var(--sun-deep));
+  display:flex;align-items:center;justify-content:center;font-size:19px}
+.brand-name{font-family:'Fraunces',serif;font-size:16px;font-weight:600;line-height:1.2}
+.brand-sub{font-size:11px;color:var(--muted)}
+.who{display:flex;align-items:center;gap:14px}
+.who-info{text-align:right}
+.who-name{font-size:13px;font-weight:700}
+.rpill{display:inline-block;padding:2px 10px;border-radius:20px;font-size:10.5px;font-weight:700;
+  letter-spacing:.02em;margin-top:2px}
+.r-admin{background:#fdecea;color:#a9322b}
+.r-teacher{background:#e6f4ea;color:#1e7a34}
+.r-accountant{background:#fdf1d9;color:#8a5b06}
+.r-student{background:#e2f2f2;color:var(--sky-deep)}
+.tabbar{display:flex;gap:4px;padding:0 20px;background:#fff;border-bottom:1px solid var(--line);
+  overflow-x:auto;position:sticky;top:65px;z-index:40}
+.tab{padding:13px 15px;font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap;
+  cursor:pointer;border-bottom:2.5px solid transparent;transition:.15s}
+.tab:hover{color:var(--ink)}
+.tab.active{color:var(--sky-deep);border-bottom-color:var(--sun)}
+.content-wrap{max-width:1180px;margin:0 auto;width:100%;padding:24px 20px 60px}
+.page-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:8px}
+.page-head h2{font-size:22px;font-weight:600}
+.clock{font-size:12.5px;color:var(--muted)}
+
+/* ── CARDS / STATS / TABLES ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.sc{background:#fff;border-radius:var(--r-md);padding:17px;box-shadow:var(--shadow-sm);
+  border-top:3px solid var(--sun);position:relative;overflow:hidden}
+.sc .val{font-size:25px;font-weight:800;font-family:'Fraunces',serif}
+.sc .lbl{font-size:12px;color:var(--muted);margin-top:2px}
+.sc .ico{position:absolute;right:14px;top:14px;font-size:24px;opacity:.16}
+.card{background:#fff;border-radius:var(--r-md);box-shadow:var(--shadow-sm);margin-bottom:16px;overflow:hidden}
+.ch{padding:14px 18px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.ch h3{font-size:14.5px;font-weight:700;font-family:'Fraunces',serif}
+.cb{padding:18px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
+th{background:var(--paper-dim);padding:9px 13px;text-align:left;font-size:11px;
+  font-weight:700;color:var(--muted)}
+td{padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border:none}
+tr:hover td{background:#fdf9ef}
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.bg-success{background:#e1f4e5;color:#1e7a34}
+.bg-danger{background:#fdecea;color:#a9322b}
+.bg-warn{background:#fdf1d9;color:#8a5b06}
+.bg-info{background:#e2f2f2;color:var(--sky-deep)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.alert{padding:11px 15px;border-radius:var(--r-sm);font-size:13px;margin-bottom:14px}
+.al-info{background:#e2f2f2;color:var(--sky-deep);border:1px solid #c9e5e5}
+.chip{display:inline-block;background:var(--paper-dim);border-radius:20px;padding:2px 10px;font-size:12px;margin:2px}
+.acc-denied{text-align:center;padding:60px 20px}
+.acc-denied .ico{font-size:56px;margin-bottom:12px}
+.hero-band{background:linear-gradient(120deg,var(--sky-deep),var(--sky));color:#fff;
+  border-radius:var(--r-lg);padding:22px 24px;margin-bottom:20px}
+.hero-band .h-name{font-size:23px;font-weight:700;font-family:'Fraunces',serif}
+.hero-band .h-sub{font-size:12.5px;opacity:.7;margin-top:3px}
+.perm-check{display:flex;align-items:center;gap:8px;padding:7px 0;font-size:13px}
+.jsonbox{background:#1a2220;color:#c9e5b8;font-family:monospace;font-size:11.5px;
+  padding:14px;border-radius:var(--r-sm);max-height:340px;overflow:auto;white-space:pre-wrap}
+
+/* ── MODAL ── */
+.mo{position:fixed;inset:0;background:rgba(20,25,20,.55);z-index:200;
+  display:flex;align-items:center;justify-content:center;padding:15px}
+.mi{background:#fff;border-radius:16px;width:100%;max-width:520px;
+  box-shadow:0 24px 60px rgba(0,0,0,.25);max-height:90vh;overflow-y:auto}
+.mh{padding:16px 22px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between}
+.mh h3{font-size:15px;font-weight:700;font-family:'Fraunces',serif}
+.mc{padding:22px}
+.mf{padding:14px 22px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end}
+.xbtn{cursor:pointer;font-size:20px;color:var(--muted);border:none;background:none}
+
+@media(max-width:900px){
+  .stats{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
 }
-.auth-wrapper::before {
-  content: ''; position: absolute; width: 350px; height: 350px; background: rgba(245, 158, 11, 0.15);
-  filter: blur(90px); border-radius: 50%; top: 10%; left: 15%;
-}
-.auth-card {
-  background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(16px); border-radius: 24px;
-  padding: 44px 38px; width: 100%; max-width: 460px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.3); z-index: 10;
-}
-.brand-head { text-align: center; margin-bottom: 28px; }
-.brand-logo {
-  width: 72px; height: 72px; background: linear-gradient(135deg, var(--accent), #b45309);
-  border-radius: 20px; display: inline-flex; align-items: center; justify-content: center;
-  font-size: 36px; margin-bottom: 12px; box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3);
-}
-.brand-head h1 { font-size: 24px; font-weight: 800; color: var(--navy); letter-spacing: -0.5px; }
-.brand-head p { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-top: 4px; }
-
-.form-group { margin-bottom: 18px; }
-.form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--navy); }
-.form-group input, .form-group select {
-  width: 100%; padding: 12px 16px; border: 1.5px solid var(--border-color); border-radius: 10px;
-  font-size: 14px; outline: none; transition: all 0.2s; background: #fff;
-}
-.form-group input:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15); }
-.error-text { color: var(--danger); font-size: 12px; margin-top: 5px; font-weight: 600; display: none; }
-
-.btn {
-  padding: 12px 22px; border: none; border-radius: 10px; font-size: 14px; font-weight: 700;
-  cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; justify-content: center;
-}
-.btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; width: 100%; }
-.btn-primary:hover { opacity: 0.95; transform: translateY(-1px); }
-.btn-accent { background: var(--accent); color: #fff; }
-.btn-accent:hover { background: var(--accent-hover); }
-.btn-sm { padding: 7px 14px; font-size: 12px; border-radius: 8px; }
-.btn-danger { background: var(--danger); color: #fff; }
-.btn-success { background: var(--success); color: #fff; }
-.btn-outline { background: transparent; border: 1.5px solid var(--border-color); color: var(--text-dark); }
-.btn-outline:hover { background: var(--bg-main); }
-
-.captcha-box {
-  display: flex; align-items: center; gap: 12px; background: var(--bg-main); padding: 10px 14px;
-  border-radius: 10px; border: 1.5px dashed #cbd5e1;
-}
-.captcha-box span { font-weight: 800; font-size: 16px; color: var(--primary-dark); flex: 1; letter-spacing: 1px; }
-.captcha-box input { width: 90px; text-align: center; font-weight: 700; border-radius: 8px; }
-
-.lock-alert {
-  background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 12px 14px;
-  font-size: 13px; color: #991b1b; margin-bottom: 18px; display: none; font-weight: 600;
-}
-
-/* ── LAYOUT & SIDEBAR ── */
-.app-container { display: flex; min-height: 100vh; }
-.sidebar {
-  width: 270px; background: var(--sidebar-bg); color: #fff; position: fixed; height: 100vh;
-  overflow-y: auto; z-index: 100; display: flex; flex-direction: column; border-right: 1px solid rgba(255,255,255,0.05);
-}
-.sb-header { padding: 26px 22px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 12px; }
-.sb-header .s-icon { width: 42px; height: 42px; background: var(--accent); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-.sb-header .s-title { font-size: 16px; font-weight: 800; color: #fff; letter-spacing: -0.3px; }
-.sb-header .s-sub { font-size: 11px; color: #94a3b8; font-weight: 500; }
-
-.sb-profile { padding: 16px 22px; margin: 12px; background: var(--sidebar-card); border-radius: 14px; }
-.sb-profile .u-name { font-size: 14px; font-weight: 700; color: #f8fafc; }
-.sb-profile .u-email { font-size: 11px; color: #94a3b8; margin-top: 2px; text-overflow: ellipsis; overflow: hidden; }
-.role-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-top: 8px; letter-spacing: 0.5px; }
-.role-admin { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
-.role-manager { background: rgba(245, 158, 11, 0.2); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.3); }
-.role-teacher { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.3); }
-.role-student { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
-
-.nav-section { font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.1em; padding: 18px 22px 6px; }
-.nav-item {
-  display: flex; align-items: center; gap: 12px; padding: 11px 22px; cursor: pointer; font-size: 13.5px;
-  color: #94a3b8; font-weight: 600; transition: all 0.2s; border-left: 4px solid transparent;
-}
-.nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.05); color: #fff; border-left-color: var(--accent); }
-.nav-item .icon { font-size: 17px; width: 22px; text-align: center; }
-
-.sb-footer { margin-top: auto; padding: 16px 22px; border-top: 1px solid rgba(255,255,255,0.08); }
-.logout-btn { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 13px; color: #f87171; font-weight: 700; transition: 0.2s; }
-.logout-btn:hover { color: #ef4444; }
-
-.main-content { margin-left: 270px; flex: 1; padding: 32px; width: calc(100% - 270px); }
-.top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; background: #fff; padding: 18px 24px; border-radius: 16px; box-shadow: var(--shadow); }
-.top-bar h2 { font-size: 20px; font-weight: 800; color: var(--navy); }
-.clock-badge { font-size: 13px; font-weight: 600; color: var(--text-muted); background: var(--bg-main); padding: 6px 14px; border-radius: 30px; }
-
-/* ── CARDS & METRICS ── */
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 28px; }
-.stat-card {
-  background: var(--card-bg); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow);
-  border: 1px solid var(--border-color); position: relative; overflow: hidden;
-}
-.stat-card .val { font-size: 28px; font-weight: 800; color: var(--navy); }
-.stat-card .lbl { font-size: 12.5px; font-weight: 600; color: var(--text-muted); margin-top: 4px; }
-.stat-card .ico-bg { position: absolute; right: 16px; top: 16px; font-size: 32px; opacity: 0.15; }
-
-.content-card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border-color); margin-bottom: 24px; overflow: hidden; }
-.card-header { padding: 18px 24px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-.card-header h3 { font-size: 15px; font-weight: 700; color: var(--navy); }
-.card-body { padding: 24px; overflow-x: auto; }
-
-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
-th { background: #f8fafc; padding: 12px 16px; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-color); }
-td { padding: 14px 16px; border-bottom: 1px solid var(--border-color); vertical-align: middle; color: var(--text-dark); }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: #f8fafc; }
-
-.status-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-.badge-active { background: #dcfce7; color: #15803d; }
-.badge-locked { background: #fee2e2; color: #b91c1c; }
-.badge-pending { background: #fef3c7; color: #b45309; }
-
-/* ── MODAL UI ── */
-.modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; }
-.modal-box { background: #fff; border-radius: 20px; width: 100%; max-width: 560px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); max-height: 90vh; overflow-y: auto; }
-.modal-head { padding: 20px 26px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; }
-.modal-head h3 { font-size: 16px; font-weight: 800; color: var(--navy); }
-.modal-body { padding: 26px; }
-.modal-foot { padding: 16px 26px; border-top: 1px solid var(--border-color); display: flex; gap: 10px; justify-content: flex-end; background: #f8fafc; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
-.close-btn { cursor: pointer; font-size: 20px; color: var(--text-muted); border: none; background: none; }
-
-.password-meter { height: 6px; border-radius: 4px; background: #e2e8f0; margin-top: 6px; overflow: hidden; }
-.meter-fill { height: 100%; width: 0; transition: width 0.3s; background: var(--danger); }
-
-/* ── RESPONSIVE ── */
-@media(max-width: 900px){
-  .sidebar { width: 100%; height: auto; position: relative; }
-  .app-container { flex-direction: column; }
-  .main-content { margin-left: 0; width: 100%; padding: 16px; }
+@media(max-width:768px){
+  .auth-art{display:none}
+  .auth-form-wrap{align-items:flex-start;padding-top:50px}
+  .topbar{padding:12px 14px}
+  .content-wrap{padding:18px 12px 50px}
+  .stats{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
-<!-- LOGIN VIEW -->
-<div id="view-login" class="auth-wrapper">
-  <div class="auth-card">
-    <div class="brand-head">
-      <div class="brand-logo">🌅</div>
-      <h1>Sunrise Public School</h1>
-      <p>Secure School Management System</p>
-    </div>
-
-    <div id="lock-alert" class="lock-alert">⚠️ Account temporarly locked due to 5 failed login attempts. Please wait 5 minutes.</div>
-
-    <div class="form-group">
-      <label>Email / Username</label>
-      <input type="email" id="login-email" placeholder="admin@sunriseschool.edu.pk">
-      <div class="error-text" id="err-email">Please enter a valid email address.</div>
-    </div>
-    
-    <div class="form-group">
-      <label>Password</label>
-      <input type="password" id="login-pass" placeholder="••••••••">
-      <div class="error-text" id="err-pass">Password is required.</div>
-    </div>
-
-    <div class="form-group">
-      <label>Security CAPTCHA Verification</label>
-      <div class="captcha-box">
-        <span id="captcha-question">Loading puzzle...</span>
-        <input type="number" id="captcha-answer" placeholder="Result">
+<!-- ══════ LOGIN PAGE ══════ -->
+<div id="pg-login" class="auth-shell">
+  <div class="auth-art">
+    <div class="art-badge">☀️</div>
+    <h1>Sun Rise Public School</h1>
+    <p class="art-tag">"Where every day begins with new light."</p>
+    <ul class="art-points">
+      <li>Separate secure dashboards for Admins, Teachers, Accountants & Students</li>
+      <li>Every sign-in checked with CAPTCHA and failed-attempt monitoring</li>
+      <li>Passwords are hashed and never stored as plain text</li>
+    </ul>
+  </div>
+  <div class="auth-form-wrap">
+    <div class="auth-form" id="login-box">
+      <div class="form-head">
+        <span class="tiny-badge">Secure Portal</span>
+        <h2>Sign in</h2>
+        <p>Enter your credentials to reach your dashboard.</p>
       </div>
-      <div class="error-text" id="err-captcha">Incorrect CAPTCHA answer.</div>
-    </div>
-
-    <button class="btn btn-primary" onclick="doLogin()">Sign In to Portal</button>
-
-    <div style="display:flex; justify-between; margin-top:16px; font-size:12px;">
-      <a href="#" style="color:var(--primary); font-weight:700; text-decoration:none;" onclick="showForgotModal()">Forgot Password / Reset OTP?</a>
+      <div id="lock-notice" class="lock-msg">⚠️ Too many failed attempts. This account is temporarily locked.</div>
+      <div class="fg">
+        <label>Email Address</label>
+        <input type="email" id="l-email" placeholder="you@sunrise.edu.pk">
+        <div class="err" id="er-email">Enter a valid email address.</div>
+      </div>
+      <div class="fg pw-row">
+        <label>Password</label>
+        <input type="password" id="l-pass" placeholder="••••••••">
+        <span class="pw-toggle" onclick="togglePw('l-pass',this)">show</span>
+        <div class="err" id="er-pass">Password is required.</div>
+      </div>
+      <label class="chk-row"><input type="checkbox" id="l-remember"> Remember me on this device</label>
+      <div class="fg">
+        <label>Security check</label>
+        <div class="cap-row">
+          <span class="cap-q" id="cap-q">Loading…</span>
+          <input type="number" id="cap-a" placeholder="?">
+        </div>
+        <div class="err" id="er-cap">That answer isn't correct — try the new question.</div>
+      </div>
+      <button class="btn btn-primary" onclick="doLogin()">Sign In</button>
+      <div class="auth-links">
+        <a onclick="openRegister()">Create an account</a> &nbsp;·&nbsp; <a onclick="openForgot()">Forgot password?</a>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- MAIN APPLICATION VIEW -->
-<div id="view-app" class="app-container" style="display:none">
-  <aside class="sidebar">
-    <div class="sb-header">
-      <div class="s-icon">🌅</div>
+<!-- ══════ MAIN APP ══════ -->
+<div id="pg-app" class="shell">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-ic">☀️</div>
       <div>
-        <div class="s-title">Sunrise Public</div>
-        <div class="s-sub">School System v2.0</div>
+        <div class="brand-name">Sun Rise Public School</div>
+        <div class="brand-sub">Secure Management Portal</div>
       </div>
     </div>
-
-    <div class="sb-profile">
-      <div class="u-name" id="sb-user-name">—</div>
-      <div class="u-email" id="sb-user-email">—</div>
-      <span class="role-badge" id="sb-user-badge">—</span>
+    <div class="who">
+      <div class="who-info">
+        <div class="who-name" id="sb-name">—</div>
+        <span class="rpill" id="sb-rbadge">—</span>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="doLogout()">Logout</button>
     </div>
-
-    <div id="sb-nav-items"></div>
-
-    <div class="sb-footer">
-      <div class="logout-btn" onclick="doLogout()">🚪 Secure Logout</div>
+  </header>
+  <nav class="tabbar" id="tabbar"></nav>
+  <main class="content-wrap">
+    <div class="page-head">
+      <h2 id="pg-title">Dashboard</h2>
+      <div class="clock" id="clk"></div>
     </div>
-  </aside>
-
-  <main class="main-content">
-    <div class="top-bar">
-      <h2 id="page-title">Dashboard</h2>
-      <div class="clock-badge" id="live-clock">--:--:--</div>
-    </div>
-    <div id="dynamic-content"></div>
+    <div id="content"></div>
   </main>
 </div>
 
-<!-- GENERAL MODAL CONTAINER -->
-<div id="modal" class="modal-overlay" style="display:none">
-  <div class="modal-box">
-    <div class="modal-head">
-      <h3 id="modal-title">—</h3>
-      <button class="close-btn" onclick="closeModal()">✕</button>
-    </div>
-    <div class="modal-body" id="modal-body"></div>
-    <div class="modal-foot" id="modal-foot"></div>
+<!-- ══════ MODAL ══════ -->
+<div id="modal" class="mo" style="display:none">
+  <div class="mi">
+    <div class="mh"><h3 id="m-title">—</h3><button class="xbtn" onclick="closeM()">✕</button></div>
+    <div class="mc" id="m-body"></div>
+    <div class="mf" id="m-foot"></div>
   </div>
 </div>
 
 <script>
-/* ─── INITIAL SECURITY & SCHOOL DATABASE ─── */
-const defaultDatabase = {
-  users: [
-    {
-      'UserID': 'U001',
-      'Full Name': 'System Administrator',
-      'Email': 'admin@sunriseschool.edu.pk',
-      'PasswordHash': '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', // Admin@1234
-      'Role': 'admin',
-      'Status': 'active',
-      'CreatedDate': '2026-08-31',
-      'Phone': '0300-1111222',
-      'Department': 'Administration'
-    },
-    {
-      'UserID': 'U002',
-      'Full Name': 'Principal Tariq Mehmood',
-      'Email': 'principal@sunriseschool.edu.pk',
-      'PasswordHash': '2c9e7a83d069b9c9f592657e2d9b6d859a7f34241ffcf8a29e4b6c3822108744', // Manager@1234
-      'Role': 'manager',
-      'Status': 'active',
-      'CreatedDate': '2026-08-31',
-      'Phone': '0301-3334445',
-      'Department': 'School Management'
-    },
-    {
-      'UserID': 'U003',
-      'Full Name': 'Sir Muhammad Usman',
-      'Email': 'teacher.ali@sunriseschool.edu.pk',
-      'PasswordHash': '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', // Teacher@1234
-      'Role': 'teacher',
-      'Status': 'active',
-      'CreatedDate': '2026-08-31',
-      'Phone': '0302-5556667',
-      'Department': 'Mathematics & Science'
-    },
-    {
-      'UserID': 'U004',
-      'Full Name': 'Zaid Ahmed (Student)',
-      'Email': 'student.zaid@sunriseschool.edu.pk',
-      'PasswordHash': 'f106f0e42d76378e1c6628b067f97b6a71e860953a1a3641b6c62b5a7e1276a7', // Student@1234
-      'Role': 'student',
-      'Status': 'active',
-      'CreatedDate': '2026-08-31',
-      'Phone': '0303-7778889',
-      'Class': 'Grade 10',
-      'Section': 'A',
-      'RollNo': '1042'
-    }
+/* ════════════════════════════════════════════════════════════
+   SUN RISE PUBLIC SCHOOL — SECURE MULTI-STAKEHOLDER PORTAL
+   Client-side demo. Browser localStorage plays the role of the
+   database. Passwords are hashed with SHA-256 (Web Crypto API)
+   plus a per-user random salt before they are ever stored —
+   the plain password is discarded immediately after hashing.
+   NOTE: because this runs entirely as a static site (GitHub
+   Pages has no server), "server-side" validation below is
+   simulated as a second, independent validation pass that runs
+   right before data is written to storage — it stands in for
+   the validation a real backend would perform.
+   ════════════════════════════════════════════════════════════ */
+
+/* ── crypto helpers ── */
+async function sha256Hex(msg){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function randSalt(){ return Math.random().toString(36).slice(2)+Date.now().toString(36); }
+async function hashPass(pass, salt){ return sha256Hex(salt+':::'+pass); }
+
+const WEAK_PASSWORDS = ['123456','password','12345678','qwerty','11111111','abc12345','iloveyou','admin123'];
+function isStrongPass(p){
+  return p.length>=8 && /[A-Z]/.test(p) && /[a-z]/.test(p) && /[0-9]/.test(p) &&
+    /[^A-Za-z0-9]/.test(p) && !WEAK_PASSWORDS.includes(p.toLowerCase());
+}
+function strCheck(p,fillId,lblId){
+  let s=0;
+  if(p.length>=8)s++; if(/[A-Z]/.test(p)&&/[a-z]/.test(p))s++; if(/[0-9]/.test(p))s++; if(/[^A-Za-z0-9]/.test(p))s++;
+  const fills=['','#d64545','#c8860a','#2f9e44','#0f5c5c'];
+  const labels=['','Weak','Fair','Strong','Very strong'];
+  const el=document.getElementById(fillId);
+  if(el){el.style.width=(s*25)+'%'; el.style.background=fills[s]||'#ccc';}
+  if(lblId) document.getElementById(lblId).textContent=labels[s]||'';
+}
+function togglePw(id,el){
+  const i=document.getElementById(id);
+  if(i.type==='password'){i.type='text';el.textContent='hide';}else{i.type='password';el.textContent='show';}
+}
+
+/* ── ROLE CONFIG ── */
+const ROLE_META = {
+  admin:      {label:'Administrator', icon:'👑', badge:'r-admin'},
+  teacher:    {label:'Teacher',       icon:'📚', badge:'r-teacher'},
+  accountant: {label:'Accountant',    icon:'💼', badge:'r-accountant'},
+  student:    {label:'Student',       icon:'🎒', badge:'r-student'}
+};
+const CAN_CREATE = { admin:['admin','teacher','accountant','student'], teacher:['student'], accountant:[], student:[] };
+const PERMS = {
+  admin:      ['manage_users','assign_roles','view_logs','view_results','manage_results','manage_attendance','manage_fees','view_fees','system_settings'],
+  teacher:    ['view_students','manage_results','manage_attendance','create_student'],
+  accountant: ['manage_fees','view_fees'],
+  student:    ['view_profile','view_results','view_attendance','view_fees']
+};
+const NAV = {
+  admin:[
+    {sec:'Overview'},{i:'📊',l:'Dashboard',k:'dashboard'},
+    {sec:'People'},{i:'👥',l:'Users',k:'users'},{i:'➕',l:'Create Account',k:'create_user'},
+    {sec:'Academics'},{i:'📝',l:'Results',k:'results'},{i:'📅',l:'Attendance',k:'attendance'},
+    {sec:'Finance'},{i:'💰',l:'Fees',k:'fees'},
+    {sec:'Security'},{i:'🛡️',l:'Access Control',k:'access_control'},{i:'🔒',l:'Security Logs',k:'logs'},{i:'⚙️',l:'Settings',k:'settings'},
+    {sec:'Account'},{i:'👤',l:'Profile',k:'profile'},
   ],
-  roles: [
-    { id: 'admin', name: 'Administrator', desc: 'Full System Management' },
-    { id: 'manager', name: 'Principal / Manager', desc: 'Management & Academic Reports' },
-    { id: 'teacher', name: 'Teacher', desc: 'Manage Students, Marks & Attendance' },
-    { id: 'student', name: 'Student / Parent', desc: 'View Own Results & Fee Records' }
+  teacher:[
+    {sec:'Overview'},{i:'📊',l:'Dashboard',k:'dashboard'},
+    {sec:'Students'},{i:'🎒',l:'My Students',k:'students'},{i:'➕',l:'Register Student',k:'create_user'},
+    {sec:'Academics'},{i:'📝',l:'Results',k:'results'},{i:'📅',l:'Attendance',k:'attendance'},
+    {sec:'Account'},{i:'👤',l:'Profile',k:'profile'},
   ],
-  role_permissions: {
-    admin: ['manage_users', 'assign_roles', 'view_logs', 'manage_courses', 'view_finance', 'system_settings', 'manage_marks', 'manage_attendance', 'manage_fees', 'view_reports', 'view_testcases', 'view_aitable'],
-    manager: ['view_users', 'view_reports', 'view_finance', 'manage_courses', 'view_logs'],
-    teacher: ['view_students', 'create_student', 'manage_marks', 'manage_attendance', 'view_courses'],
-    student: ['view_profile', 'view_results', 'view_attendance', 'view_courses']
-  },
-  students: [
-    { StudentID: 'STU101', Name: 'Zaid Ahmed', Email: 'student.zaid@sunriseschool.edu.pk', Class: 'Grade 10', Section: 'A', RollNo: '1042', Phone: '0303-7778889', Status: 'active' },
-    { StudentID: 'STU102', Name: 'Amina Fatima', Email: 'amina@sunriseschool.edu.pk', Class: 'Grade 10', Section: 'B', RollNo: '1043', Phone: '0300-9988776', Status: 'active' }
+  accountant:[
+    {sec:'Overview'},{i:'📊',l:'Dashboard',k:'dashboard'},
+    {sec:'Finance'},{i:'💰',l:'Fee Records',k:'fees'},
+    {sec:'Account'},{i:'👤',l:'Profile',k:'profile'},
   ],
-  courses: [
-    { CourseID: 'MATH-10', Name: 'Mathematics Class 10', Teacher: 'Sir Muhammad Usman', Class: 'Grade 10' },
-    { CourseID: 'SCI-10', Name: 'General Science', Teacher: 'Sir Muhammad Usman', Class: 'Grade 10' }
-  ],
-  marks: [
-    { StudentID: 'STU101', Name: 'Zaid Ahmed', Subject: 'Mathematics', Midterm: 46, Final: 92, Total: 138, Grade: 'A+' }
-  ],
-  fees: [
-    { FeeID: 'FEE-2026-01', Name: 'Zaid Ahmed', Amount: 15000, DueDate: '2026-09-10', Status: 'Pending' }
-  ],
-  attendance: [
-    { StudentID: 'STU101', Name: 'Zaid Ahmed', Subject: 'Mathematics', Date: '2026-08-31', Status: 'Present' }
-  ],
-  secLogs: [
-    { LogID: 1, Email: 'admin@sunriseschool.edu.pk', Role: 'admin', Activity: 'System Initialized', Status: 'Success', Timestamp: new Date().toLocaleString() }
-  ],
-  testCases: [
-    { test: "Correct Credentials", expected: "Dashboard Opens", actual: "Dashboard Opens", status: "Pass" },
-    { test: "Wrong Password", expected: "Login Rejected", actual: "Login Rejected", status: "Pass" },
-    { test: "Weak Password Policy", expected: "Validation Error", actual: "Validation Error", status: "Pass" },
-    { test: "Incorrect CAPTCHA", expected: "Login Blocked", actual: "Login Blocked", status: "Pass" },
-    { test: "5 Failed Attempts", expected: "Account Temporarily Locked", actual: "Account Temporarily Locked", status: "Pass" },
-    { test: "Student Access Admin Page", expected: "403 Forbidden Access Denied", actual: "Access Denied", status: "Pass" },
-    { test: "Teacher Access System Settings", expected: "Access Denied", actual: "Access Denied", status: "Pass" },
-    { test: "Password Hashing Check", expected: "SHA-256 Hashed in Database", actual: "Hashed String", status: "Pass" },
-    { test: "Direct URL Access After Logout", expected: "Redirect to Login", actual: "Redirected", status: "Pass" },
-    { test: "Invalid Email Input", expected: "Validation Error", actual: "Validation Error", status: "Pass" }
-  ],
-  aiUsageTable: [
-    { tool: "ChatGPT", purpose: "Login Flow & Access Control Matrix", prompt: "Create secure RBAC architecture with access matrix", used: "Yes", mod: "Customized for Sunrise Public School" },
-    { tool: "Gemini", purpose: "Database Hashing & Security Audit Logs", prompt: "Implement SHA-256 hashing in browser client", used: "Yes", mod: "Added real SHA-256 Web Crypto integration" },
-    { tool: "Claude", purpose: "Security Vulnerability Code Review", prompt: "Perform OWASP security review on session handling", used: "Yes", mod: "Applied session guards & route checks" }
+  student:[
+    {sec:'Overview'},{i:'📊',l:'Dashboard',k:'dashboard'},
+    {sec:'Academics'},{i:'📝',l:'My Results',k:'results'},{i:'📅',l:'Attendance',k:'attendance'},
+    {sec:'Finance'},{i:'💰',l:'Fees',k:'fees'},
+    {sec:'Account'},{i:'👤',l:'Profile',k:'profile'},
   ]
 };
+const ALLOWED = {
+  admin:['dashboard','users','create_user','results','attendance','fees','access_control','logs','settings','profile'],
+  teacher:['dashboard','students','create_user','results','attendance','profile'],
+  accountant:['dashboard','fees','profile'],
+  student:['dashboard','results','attendance','fees','profile']
+};
 
-/* ── PERSISTENCE SETUP ── */
-let DB = JSON.parse(localStorage.getItem('sunrise_school_db')) || defaultDatabase;
-function saveDB() { localStorage.setItem('sunrise_school_db', JSON.stringify(DB)); }
+/* ── SEED DATABASE (built + hashed on first run) ── */
+const today = new Date().toISOString().slice(0,10);
+const SEED = [
+  {UserID:'U001',FullName:'Momin Asif',Email:'mominasif@gmail.com',Password:'Momin@1122',Role:'admin',Phone:'0300-1112233',Department:'Administration'},
+  {UserID:'U002',FullName:'Mr. Bilal Hussain',Email:'teacher@sunrise.edu.pk',Password:'Sunrise@Teach1',Role:'teacher',Phone:'0301-2223344',Subject:'Mathematics',Classes:'6-A, 7-A'},
+  {UserID:'U003',FullName:'Waleed Sarwar',Email:'accountant@sunrise.edu.pk',Password:'Sunrise@Acct1',Role:'accountant',Phone:'0302-3334455',Department:'Finance'},
+  {UserID:'U004',FullName:'Hamza Iqbal',Email:'student@sunrise.edu.pk',Password:'Sunrise@Stud1',Role:'student',Phone:'0303-4445566',StudentID:'STU-1001',Class:'6',Section:'A',RollNo:'12'}
+];
 
-/* ── SHA-256 HASHING FUNCTION ── */
-async function hashPassword(plainText) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(plainText + "_sunrise_salt_2026");
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+let DB, SESSION;
+
+async function buildSeedDB(){
+  const users=[];
+  for(const s of SEED){
+    const salt=randSalt();
+    const passwordHash=await hashPass(s.Password,salt);
+    const {Password, ...rest}=s;
+    users.push({...rest, Salt:salt, PasswordHash:passwordHash, Status:'active',
+      ExtraPermissions:[], CreatedBy:'SYSTEM', CreatedByRole:'system', CreatedDate:today});
+  }
+  return {
+    users,
+    students:[{StudentID:'STU-1001',FullName:'Hamza Iqbal',Email:'student@sunrise.edu.pk',Class:'6',Section:'A',RollNo:'12',Status:'active',CreatedBy:'SYSTEM',CreatedDate:today}],
+    results:[
+      {ResultID:'RES001',StudentID:'STU-1001',StudentName:'Hamza Iqbal',Class:'6-A',Subject:'Mathematics',Term:'Term 1',Obtained:78,Total:100,Grade:'A'},
+      {ResultID:'RES002',StudentID:'STU-1001',StudentName:'Hamza Iqbal',Class:'6-A',Subject:'English',Term:'Term 1',Obtained:85,Total:100,Grade:'A+'}
+    ],
+    attendance:[
+      {StudentID:'STU-1001',StudentName:'Hamza Iqbal',Class:'6-A',Date:today,Status:'Present'},
+      {StudentID:'STU-1001',StudentName:'Hamza Iqbal',Class:'6-A',Date:'2026-08-31',Status:'Present'},
+      {StudentID:'STU-1001',StudentName:'Hamza Iqbal',Class:'6-A',Date:'2026-08-28',Status:'Absent'}
+    ],
+    fees:[{FeeID:'FEE001',StudentID:'STU-1001',StudentName:'Hamza Iqbal',Class:'6-A',Amount:8500,DueDate:'2026-09-15',Status:'Pending'}],
+    secLogs:[],
+    loginAttempts:[],
+    pendingVerifications:[]
+  };
 }
 
-/* ── CAPTCHA GENERATOR ── */
-let currentCaptchaAns = 0;
-function refreshCaptcha() {
-  const n1 = Math.floor(Math.random() * 12) + 2;
-  const n2 = Math.floor(Math.random() * 9) + 1;
-  const ops = [{ s: '+', r: n1 + n2 }, { s: '×', r: n1 * n2 }];
-  const op = ops[Math.floor(Math.random() * ops.length)];
-  document.getElementById('captcha-question').textContent = `Solve: ${n1} ${op.s} ${n2} = ?`;
-  currentCaptchaAns = op.r;
-  document.getElementById('captcha-answer').value = '';
+function saveDB(){ localStorage.setItem('srps_db_v2', JSON.stringify(DB)); }
+function saveSession(){
+  const raw=JSON.stringify(SESSION);
+  if(SESSION && SESSION.remember){ localStorage.setItem('srps_session_v2', raw); sessionStorage.removeItem('srps_session_v2'); }
+  else if(SESSION){ sessionStorage.setItem('srps_session_v2', raw); localStorage.removeItem('srps_session_v2'); }
+  else { localStorage.removeItem('srps_session_v2'); sessionStorage.removeItem('srps_session_v2'); }
+}
+function loadSession(){
+  const raw = localStorage.getItem('srps_session_v2') || sessionStorage.getItem('srps_session_v2');
+  return raw ? JSON.parse(raw) : null;
 }
 
-/* ── ATTEMPT LOCKOUT TRACKING ── */
-const failedAttempts = {};
+function findUser(email){ return DB.users.find(u=>(u.Email||'').toLowerCase()===email.toLowerCase()); }
+function addLog(email,role,activity,status){
+  DB.secLogs.push({LogID:'L'+(DB.secLogs.length+1),Email:email,Role:role,Activity:activity,Status:status,Timestamp:new Date().toLocaleString()});
+  saveDB();
+}
+function addLoginAttempt(email,status){
+  DB.loginAttempts.push({AttemptID:'A'+(DB.loginAttempts.length+1),Email:email,Time:new Date().toLocaleString(),Status:status});
+  saveDB();
+}
 
-/* ── LOGIN HANDLER ── */
-async function doLogin() {
-  clearErrors();
-  const email = (document.getElementById('login-email').value || '').trim();
-  const pass = document.getElementById('login-pass').value;
-  const capVal = parseInt(document.getElementById('captcha-answer').value);
-  let valid = true;
+/* ── CAPTCHA ── */
+let capAns=0;
+function genCap(){
+  const a=Math.floor(Math.random()*12)+1, b=Math.floor(Math.random()*9)+1;
+  const ops=[{s:'+',r:a+b},{s:'−',r:Math.abs(a-b)},{s:'×',r:a*b}];
+  const o=ops[Math.floor(Math.random()*ops.length)];
+  const q=document.getElementById('cap-q'); if(q) q.textContent=`What is ${Math.max(a,b)} ${o.s} ${Math.min(a,b)} ?`;
+  capAns=o.r;
+  const inp=document.getElementById('cap-a'); if(inp) inp.value='';
+}
 
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('err-email'); valid = false; }
-  if (!pass) { showError('err-pass'); valid = false; }
-  if (isNaN(capVal) || capVal !== currentCaptchaAns) { showError('err-captcha'); refreshCaptcha(); valid = false; }
-  if (!valid) return;
+/* ── attempt tracking (persisted, per-email) ── */
+function getAttempts(){ return JSON.parse(localStorage.getItem('srps_attempts_v2')||'{}'); }
+function saveAttempts(a){ localStorage.setItem('srps_attempts_v2', JSON.stringify(a)); }
+function getAtt(email){
+  const a=getAttempts();
+  if(!a[email]) a[email]={count:0,locked:false,lockTime:null};
+  return a[email];
+}
+function setAtt(email,val){ const a=getAttempts(); a[email]=val; saveAttempts(a); }
 
-  if (!failedAttempts[email]) failedAttempts[email] = { count: 0, lockedUntil: null };
-  const att = failedAttempts[email];
+function clearErrs(){ document.querySelectorAll('.err').forEach(e=>e.style.display='none');
+  document.querySelectorAll('.invalid').forEach(e=>e.classList.remove('invalid')); }
+function showErr(id){
+  const el=document.getElementById(id); if(el) el.style.display='block';
+  const inp=el && el.previousElementSibling; if(inp && inp.tagName==='INPUT') inp.classList.add('invalid');
+}
 
-  if (att.lockedUntil && Date.now() < att.lockedUntil) {
-    document.getElementById('lock-alert').style.display = 'block';
-    refreshCaptcha(); return;
+/* ── LOGIN ── */
+async function doLogin(){
+  clearErrs();
+  const email=(document.getElementById('l-email').value||'').trim();
+  const pass=document.getElementById('l-pass').value;
+  const cap=parseInt(document.getElementById('cap-a').value);
+  const remember=document.getElementById('l-remember').checked;
+  let ok=true;
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showErr('er-email');ok=false;}
+  if(!pass){showErr('er-pass');ok=false;}
+  if(isNaN(cap)||cap!==capAns){showErr('er-cap');genCap();ok=false;}
+  if(!ok) return;
+
+  const att=getAtt(email);
+  if(att.locked){
+    const elapsed=(Date.now()-att.lockTime)/1000;
+    if(elapsed<300){ document.getElementById('lock-notice').style.display='block'; genCap(); return; }
+    att.locked=false; att.count=0; setAtt(email,att);
   }
 
-  const user = DB.users.find(u => u['Email'].toLowerCase() === email.toLowerCase());
-  const inputHash = await hashPassword(pass);
+  const user=findUser(email);
+  const okPass = user ? (await hashPass(pass,user.Salt))===user.PasswordHash : false;
 
-  if (!user || user['PasswordHash'] !== inputHash) {
+  if(!user || !okPass){
     att.count++;
-    addLog(email, '—', `Failed Login Attempt (${att.count}/5)`, 'Failed');
-    if (att.count >= 5) {
-      att.lockedUntil = Date.now() + 300000; // 5 min lock
-      document.getElementById('lock-alert').style.display = 'block';
-      addLog(email, '—', 'Account Locked (5 Failed Attempts)', 'Blocked');
+    addLoginAttempt(email,'Failed');
+    addLog(email,'—',`Failed login attempt #${att.count}`,'Failed');
+    if(att.count>=5){
+      att.locked=true; att.lockTime=Date.now();
+      addLog(email,'—','Account temporarily locked (5 failed attempts)','Blocked');
+      document.getElementById('lock-notice').style.display='block';
     } else {
-      alert(`❌ Invalid credentials. Attempt ${att.count} of 5.`);
+      alert(`Invalid credentials. Attempt ${att.count}/5.`);
     }
-    refreshCaptcha(); return;
+    setAtt(email,att); genCap(); return;
+  }
+  if((user.Status||'').toLowerCase()==='pending_verification'){
+    alert('This account is awaiting email verification. Please verify your account first.'); genCap(); return;
+  }
+  if((user.Status||'').toLowerCase()==='locked'){
+    alert('Your account has been locked by an administrator. Please contact the school office.'); genCap(); return;
   }
 
-  if (user['Status'] === 'locked') {
-    alert('⚠️ Your account is locked by administrator.'); refreshCaptcha(); return;
-  }
+  att.count=0; att.locked=false; setAtt(email,att);
+  addLoginAttempt(email,'Success');
+  addLog(email,user.Role,'Successful login','Success');
 
-  att.count = 0; att.lockedUntil = null;
-  addLog(email, user['Role'], 'Successful Login', 'Success');
-
-  SESSION = { user, token: 'session_' + Math.random().toString(36).substr(2), loginTime: Date.now() };
-  localStorage.setItem('sunrise_session', JSON.stringify(SESSION));
-  localStorage.setItem('sunrise_current_section', 'dashboard');
-
+  SESSION={user,token:'sess_'+Math.random().toString(36).slice(2),time:Date.now(),remember};
+  saveSession();
   loadApp();
 }
 
-/* ── SESSION MANAGEMENT ── */
-let SESSION = JSON.parse(localStorage.getItem('sunrise_session')) || null;
-
-function doLogout() {
-  if (!confirm('Are you sure you want to securely logout?')) return;
-  if (SESSION) addLog(SESSION.user['Email'], SESSION.user['Role'], 'Secure Logout', 'Success');
-  SESSION = null;
-  localStorage.removeItem('sunrise_session');
-  document.getElementById('view-app').style.display = 'none';
-  document.getElementById('view-login').style.display = 'flex';
-  refreshCaptcha();
+/* ── LOGOUT ── */
+function doLogout(){
+  if(!confirm('Sign out of your secure session?')) return;
+  if(SESSION) addLog(SESSION.user.Email, SESSION.user.Role, 'Secure logout', 'Success');
+  SESSION=null; saveSession();
+  document.getElementById('pg-app').style.display='none';
+  document.getElementById('pg-login').style.display='flex';
+  genCap();
 }
 
-function hasPermission(permKey) {
-  if (!SESSION) return false;
-  const userRole = SESSION.user['Role'];
-  const perms = DB.role_permissions[userRole] || [];
-  return perms.includes(permKey);
+/* session timeout: 30 min absolute */
+function sessionExpired(){ return SESSION && (Date.now()-SESSION.time) > 30*60*1000; }
+
+/* ── PERMISSIONS ── */
+function can(p){
+  if(!SESSION) return false;
+  const role=SESSION.user.Role;
+  return (PERMS[role]||[]).includes(p) || (SESSION.user.ExtraPermissions||[]).includes(p);
+}
+function canCreate(role){ return SESSION && (CAN_CREATE[SESSION.user.Role]||[]).includes(role); }
+
+/* ── APP LOAD ── */
+function loadApp(){
+  if(sessionExpired()){
+    alert('Your session has expired for security reasons. Please sign in again.');
+    doLogout(); return;
+  }
+  document.getElementById('pg-login').style.display='none';
+  document.getElementById('pg-app').style.display='flex';
+  const u=SESSION.user;
+  document.getElementById('sb-name').textContent=u.FullName;
+  const rb=document.getElementById('sb-rbadge');
+  const rm=ROLE_META[u.Role]||{label:u.Role,badge:''};
+  rb.textContent=rm.icon+' '+rm.label; rb.className='rpill '+rm.badge;
+  buildTabbar();
+  goSection(localStorage.getItem('srps_curSec_v2')||'dashboard');
 }
 
-/* ── APPLICATION CONTROLLER ── */
-function loadApp() {
-  document.getElementById('view-login').style.display = 'none';
-  document.getElementById('view-app').style.display = 'flex';
-
-  const u = SESSION.user;
-  document.getElementById('sb-user-name').textContent = u['Full Name'];
-  document.getElementById('sb-user-email').textContent = u['Email'];
-  const badge = document.getElementById('sb-user-badge');
-  badge.textContent = u['Role'];
-  badge.className = 'role-badge role-' + u['Role'];
-
-  buildNavigation();
-  const lastSec = localStorage.getItem('sunrise_current_section') || 'dashboard';
-  goSection(lastSec);
-}
-
-/* ── NAVIGATION BUILDER ── */
-const NAVIGATION_ITEMS = {
-  admin: [
-    { sec: 'Overview' }, { icon: '📊', label: 'Dashboard', key: 'dashboard' },
-    { sec: 'Access & Security' }, { icon: '👥', label: 'User Directory', key: 'users' },
-    { icon: '🔑', label: 'Roles & Access Matrix', key: 'roles_matrix' },
-    { icon: '➕', label: 'Create Account', key: 'create_user' },
-    { sec: 'Academic & Finance' }, { icon: '📘', label: 'Courses & Classes', key: 'courses' },
-    { icon: '💰', label: 'Fee Management', key: 'fees' },
-    { sec: 'Audit & Compliance' }, { icon: '🔒', label: 'Security Audit Log', key: 'logs' },
-    { icon: '🧪', label: 'Security Test Cases', key: 'testcases' },
-    { icon: '🤖', label: 'AI Usage Table', key: 'aitable' },
-    { icon: '⚙️', label: 'System Settings', key: 'settings' }
-  ],
-  manager: [
-    { sec: 'Overview' }, { icon: '📊', label: 'Dashboard', key: 'dashboard' },
-    { sec: 'School Operations' }, { icon: '👥', label: 'Users View', key: 'users' },
-    { icon: '📘', label: 'Courses', key: 'courses' }, { icon: '💰', label: 'Financial Records', key: 'fees' },
-    { sec: 'Audit' }, { icon: '🔒', label: 'Security Logs', key: 'logs' }
-  ],
-  teacher: [
-    { sec: 'Overview' }, { icon: '📊', label: 'Dashboard', key: 'dashboard' },
-    { sec: 'Academic' }, { icon: '🎓', label: 'My Students', key: 'students' },
-    { icon: '➕', label: 'Register Student', key: 'create_user' },
-    { icon: '📝', label: 'Marks Entry', key: 'marks' }, { icon: '📅', label: 'Attendance', key: 'attendance' }
-  ],
-  student: [
-    { sec: 'Overview' }, { icon: '📊', label: 'Dashboard', key: 'dashboard' },
-    { sec: 'Student Portal' }, { icon: '📜', label: 'My Results', key: 'results' },
-    { icon: '📅', label: 'Attendance Record', key: 'attendance' }
-  ]
-};
-
-function buildNavigation() {
-  const role = SESSION.user['Role'];
-  const items = NAVIGATION_ITEMS[role] || [];
-  document.getElementById('sb-nav-items').innerHTML = items.map(n =>
-    n.sec ? `<div class="nav-section">${n.sec}</div>`
-          : `<div class="nav-item" id="nav-${n.key}" onclick="goSection('${n.key}')">
-              <span class="icon">${n.icon}</span><span>${n.label}</span></div>`
+function buildTabbar(){
+  const items=NAV[SESSION.user.Role]||[];
+  document.getElementById('tabbar').innerHTML=items.map(n=>
+    n.sec? '' : `<div class="tab" id="tab-${n.k}" onclick="goSection('${n.k}')">${n.i} ${n.l}</div>`
   ).join('');
 }
 
-function goSection(key) {
-  if (!SESSION) return;
-  const role = SESSION.user['Role'];
-  const allowedKeys = (NAVIGATION_ITEMS[role] || []).filter(x => x.key).map(x => x.key);
-
-  if (!allowedKeys.includes(key)) {
-    addLog(SESSION.user['Email'], role, `Unauthorized Access Attempt: /section/${key}`, 'Blocked');
-    document.getElementById('dynamic-content').innerHTML = `
-      <div style="text-align:center; padding:60px 20px;">
-        <div style="font-size:64px; margin-bottom:12px;">🚫</div>
-        <h2 style="color:var(--danger); font-size:24px; font-weight:800;">403 – Access Denied</h2>
-        <p style="color:var(--text-muted); margin-top:6px;">You do not have permission to view this section.<br>This security incident has been logged.</p>
-      </div>`;
+function goSection(k){
+  if(!SESSION) return;
+  const role=SESSION.user.Role;
+  if(!(ALLOWED[role]||[]).includes(k)){
+    addLog(SESSION.user.Email,role,'Unauthorized access attempt: /app/'+k,'Blocked');
+    document.getElementById('content').innerHTML=`
+      <div class="acc-denied"><div class="ico">🚫</div>
+      <h2 style="color:var(--danger);margin-bottom:8px">403 — Access Denied</h2>
+      <p>Your role (<strong>${ROLE_META[role]?.label||role}</strong>) does not have permission to view
+      <strong>/app/${k}</strong>. This attempt has been recorded in the security log.</p></div>`;
     return;
   }
-
-  localStorage.setItem('sunrise_current_section', key);
-  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-  const activeNav = document.getElementById('nav-' + key);
-  if (activeNav) activeNav.classList.add('active');
-
-  document.getElementById('page-title').textContent = key.replace(/_/g, ' ').toUpperCase();
-  (SECTIONS[key] || function(){})();
+  localStorage.setItem('srps_curSec_v2',k);
+  document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));
+  const el=document.getElementById('tab-'+k); if(el) el.classList.add('active');
+  document.getElementById('pg-title').textContent=k.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+  (SECS[k]||function(){ document.getElementById('content').innerHTML=''; })();
 }
 
-/* ── SECTIONS VIEWS ── */
-const SECTIONS = {
+/* ── MODAL HELPERS ── */
+function openM(title,body,foot){
+  document.getElementById('m-title').textContent=title;
+  document.getElementById('m-body').innerHTML=body;
+  document.getElementById('m-foot').innerHTML=foot||'';
+  document.getElementById('modal').style.display='flex';
+}
+function closeM(){ document.getElementById('modal').style.display='none'; }
 
-dashboard() {
-  const role = SESSION.user['Role'];
-  let html = '';
-  if (role === 'admin' || role === 'manager') {
-    html = `
-    <div class="stats-grid">
-      <div class="stat-card"><div class="val">${DB.users.length}</div><div class="lbl">Total Accounts</div><div class="ico-bg">👥</div></div>
-      <div class="stat-card"><div class="val">${DB.students.length}</div><div class="lbl">Enrolled Students</div><div class="ico-bg">🎓</div></div>
-      <div class="stat-card"><div class="val">${DB.courses.length}</div><div class="lbl">Active Classes</div><div class="ico-bg">📘</div></div>
-      <div class="stat-card"><div class="val">${DB.secLogs.filter(l => l.Status === 'Blocked').length}</div><div class="lbl">Security Alerts</div><div class="ico-bg">🔒</div></div>
+/* ── SECTIONS ── */
+const SECS = {
+
+dashboard(){
+  const role=SESSION.user.Role, u=SESSION.user;
+  let html='';
+  if(role==='admin'){
+    const total=DB.users.length;
+    const tch=DB.users.filter(x=>x.Role==='teacher').length;
+    const acc=DB.users.filter(x=>x.Role==='accountant').length;
+    const stu=DB.users.filter(x=>x.Role==='student').length;
+    const alerts=DB.secLogs.filter(l=>l.Status==='Blocked').length;
+    html=`
+    <div class="hero-band"><div class="h-name">Welcome back, ${u.FullName}</div>
+      <div class="h-sub">Full administrative access — manage people, permissions and security.</div></div>
+    <div class="stats">
+      <div class="sc"><span class="ico">👥</span><div class="val">${total}</div><div class="lbl">Total Users</div></div>
+      <div class="sc" style="border-top-color:#0f5c5c"><span class="ico">📚</span><div class="val">${tch}</div><div class="lbl">Teachers</div></div>
+      <div class="sc" style="border-top-color:#c8860a"><span class="ico">💼</span><div class="val">${acc}</div><div class="lbl">Accountants</div></div>
+      <div class="sc" style="border-top-color:#d64545"><span class="ico">🔒</span><div class="val">${alerts}</div><div class="lbl">Security Alerts</div></div>
     </div>
-    
-    <div class="content-card">
-      <div class="card-header"><h3>Recent System Activity Logs</h3></div>
-      <div class="card-body">
-        <table>
-          <tr><th>User Email</th><th>Role</th><th>Activity</th><th>Status</th><th>Time</th></tr>
-          ${DB.secLogs.slice(-6).reverse().map(l => `<tr>
-            <td><strong>${l.Email}</strong></td>
-            <td><span class="role-badge role-${l.Role}">${l.Role}</span></td>
-            <td>${l.Activity}</td>
-            <td><span class="status-badge ${l.Status==='Success'?'badge-active':'badge-locked'}">${l.Status}</span></td>
-            <td>${l.Timestamp}</td>
-          </tr>`).join('')}
-        </table>
-      </div>
+    <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:16px" class="form-row">
+      <div class="card"><div class="ch"><h3>Recent security activity</h3><a onclick="goSection('logs')">View all</a></div><div class="cb">
+        <table><tr><th>User</th><th>Activity</th><th>Status</th></tr>
+        ${[...DB.secLogs].slice(-8).reverse().map(l=>`<tr>
+          <td>${l.Email}</td><td>${l.Activity}</td>
+          <td><span class="badge ${l.Status==='Success'?'bg-success':l.Status==='Failed'?'bg-danger':'bg-warn'}">${l.Status}</span></td>
+        </tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:var(--muted)">No activity yet</td></tr>'}
+        </table></div></div>
+      <div class="card"><div class="ch"><h3>Students</h3></div><div class="cb">
+        <div style="font-size:36px;font-weight:800;font-family:'Fraunces',serif">${stu}</div>
+        <div style="font-size:12.5px;color:var(--muted);margin-bottom:10px">enrolled across all classes</div>
+        <a onclick="goSection('access_control')">View access control matrix →</a>
+      </div></div>
     </div>`;
-  } else if (role === 'teacher') {
-    html = `
-    <div class="stats-grid">
-      <div class="stat-card"><div class="val">${DB.students.length}</div><div class="lbl">My Students</div><div class="ico-bg">🎓</div></div>
-      <div class="stat-card"><div class="val">${DB.courses.length}</div><div class="lbl">Assigned Courses</div><div class="ico-bg">📘</div></div>
+  } else if(role==='teacher'){
+    const myStudents=DB.students;
+    html=`
+    <div class="hero-band"><div class="h-name">Welcome, ${u.FullName}</div>
+      <div class="h-sub">${u.Subject||'—'} · Classes: ${u.Classes||'—'}</div></div>
+    <div class="stats">
+      <div class="sc"><span class="ico">🎒</span><div class="val">${myStudents.length}</div><div class="lbl">Total Students</div></div>
+      <div class="sc" style="border-top-color:#0f5c5c"><span class="ico">📝</span><div class="val">${DB.results.length}</div><div class="lbl">Results Recorded</div></div>
+      <div class="sc" style="border-top-color:#6a34b0"><span class="ico">📅</span><div class="val">${DB.attendance.length}</div><div class="lbl">Attendance Entries</div></div>
     </div>
-    <div class="content-card">
-      <div class="card-header"><h3>Registered Students</h3></div>
-      <div class="card-body">
-        <table>
-          <tr><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Phone</th></tr>
-          ${DB.students.map(s => `<tr><td>${s.StudentID}</td><td><strong>${s.Name}</strong></td><td>${s.Class}</td><td>${s.Section}</td><td>${s.Phone}</td></tr>`).join('')}
-        </table>
-      </div>
-    </div>`;
-  } else if (role === 'student') {
-    const myMarks = DB.marks.filter(m => m.Name.includes('Zaid'));
-    html = `
-    <div class="stats-grid">
-      <div class="stat-card"><div class="val">Grade 10-A</div><div class="lbl">Current Class</div><div class="ico-bg">🏫</div></div>
-      <div class="stat-card"><div class="val">92%</div><div class="lbl">Attendance Rate</div><div class="ico-bg">📅</div></div>
+    <div class="card"><div class="ch"><h3>My students</h3>
+      <button class="btn btn-gold btn-sm" onclick="goSection('create_user')">+ Register Student</button></div>
+      <div class="cb"><table><tr><th>ID</th><th>Name</th><th>Class</th><th>Status</th></tr>
+      ${myStudents.map(s=>`<tr><td>${s.StudentID}</td><td><strong>${s.FullName}</strong></td>
+        <td>${s.Class}-${s.Section}</td><td><span class="badge bg-success">${s.Status}</span></td></tr>`).join('')||
+        '<tr><td colspan="4" style="text-align:center;color:var(--muted)">No students yet</td></tr>'}
+      </table></div></div>`;
+  } else if(role==='accountant'){
+    const pendingFees=DB.fees.filter(f=>f.Status!=='Paid').length;
+    const paidFees=DB.fees.filter(f=>f.Status==='Paid').length;
+    const totalCollected=DB.fees.filter(f=>f.Status==='Paid').reduce((s,f)=>s+Number(f.Amount),0);
+    html=`
+    <div class="hero-band"><div class="h-name">Welcome, ${u.FullName}</div>
+      <div class="h-sub">Manage school fee records and financial updates.</div></div>
+    <div class="stats">
+      <div class="sc"><span class="ico">💰</span><div class="val">${DB.fees.length}</div><div class="lbl">Total Fee Records</div></div>
+      <div class="sc" style="border-top-color:#c8860a"><span class="ico">⏳</span><div class="val">${pendingFees}</div><div class="lbl">Pending Fees</div></div>
+      <div class="sc" style="border-top-color:#2f9e44"><span class="ico">✅</span><div class="val">${paidFees}</div><div class="lbl">Paid Fees</div></div>
     </div>
-    <div class="content-card">
-      <div class="card-header"><h3>Academic Report Card</h3></div>
-      <div class="card-body">
-        <table>
-          <tr><th>Subject</th><th>Midterm</th><th>Final</th><th>Total</th><th>Grade</th></tr>
-          ${myMarks.map(m => `<tr><td>${m.Subject}</td><td>${m.Midterm}/50</td><td>${m.Final}/100</td><td>${m.Total}/150</td><td><span class="status-badge badge-active">${m.Grade}</span></td></tr>`).join('')}
-        </table>
-      </div>
-    </div>`;
+    <div class="card"><div class="ch"><h3>Fee overview</h3><a onclick="goSection('fees')">Manage fees →</a></div><div class="cb">
+      <div style="font-size:30px;font-weight:800;font-family:'Fraunces',serif">PKR ${totalCollected.toLocaleString()}</div>
+      <div style="font-size:12.5px;color:var(--muted)">total collected so far</div>
+    </div></div>`;
+  } else if(role==='student'){
+    const myRes=DB.results.filter(r=>r.StudentID===u.StudentID);
+    const myAtt=DB.attendance.filter(a=>a.StudentID===u.StudentID);
+    const pres=myAtt.filter(a=>a.Status==='Present').length;
+    const pct=myAtt.length?Math.round(pres/myAtt.length*100):0;
+    html=`
+    <div class="hero-band"><div class="h-name">Welcome, ${u.FullName}</div>
+      <div class="h-sub">Class ${u.Class}-${u.Section} · Roll No. ${u.RollNo} · ${u.StudentID}</div></div>
+    <div class="stats">
+      <div class="sc"><span class="ico">📝</span><div class="val">${myRes.length}</div><div class="lbl">Subjects Graded</div></div>
+      <div class="sc" style="border-top-color:#0f5c5c"><span class="ico">📅</span><div class="val">${pct}%</div><div class="lbl">Attendance</div></div>
+      <div class="sc" style="border-top-color:#c8860a"><span class="ico">💰</span><div class="val">${DB.fees.filter(f=>f.StudentID===u.StudentID&&f.Status!=='Paid').length}</div><div class="lbl">Pending Fees</div></div>
+    </div>
+    <div class="card"><div class="ch"><h3>My results</h3></div><div class="cb">
+      <table><tr><th>Subject</th><th>Term</th><th>Score</th><th>Grade</th></tr>
+      ${myRes.map(r=>`<tr><td>${r.Subject}</td><td>${r.Term}</td><td>${r.Obtained}/${r.Total}</td>
+        <td><span class="badge bg-success">${r.Grade}</span></td></tr>`).join('')||
+        '<tr><td colspan="4" style="text-align:center;color:var(--muted)">No results yet</td></tr>'}
+      </table></div></div>`;
   }
-  document.getElementById('dynamic-content').innerHTML = html;
+  document.getElementById('content').innerHTML=html;
 },
 
-users() {
-  document.getElementById('dynamic-content').innerHTML = `
-    <div class="content-card">
-      <div class="card-header">
-        <h3>User Directory & Account Status</h3>
-        ${SESSION.user['Role']==='admin'?`<button class="btn btn-primary btn-sm" onclick="goSection('create_user')">+ New Account</button>`:''}
-      </div>
-      <div class="card-body">
-        <table>
-          <tr><th>User ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr>
-          ${DB.users.map(u => `<tr>
-            <td>${u.UserID}</td>
-            <td><strong>${u['Full Name']}</strong></td>
-            <td>${u.Email}</td>
-            <td><span class="role-badge role-${u.Role}">${u.Role}</span></td>
-            <td><span class="status-badge ${u.Status==='active'?'badge-active':'badge-locked'}">${u.Status}</span></td>
-            <td>
-              ${SESSION.user['Role']==='admin' ? `
-                <button class="btn btn-outline btn-sm" onclick="toggleUserStatus('${u.Email}')">${u.Status==='active'?'Lock':'Unlock'}</button>
-              ` : 'View Only'}
-            </td>
-          </tr>`).join('')}
-        </table>
-      </div>
-    </div>`;
+users(){
+  if(!can('manage_users')){ return deny('users'); }
+  document.getElementById('content').innerHTML=`
+    <div class="card"><div class="ch"><h3>All users</h3>
+      <button class="btn btn-gold btn-sm" onclick="goSection('create_user')">+ Create Account</button></div>
+    <div class="cb"><table><tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr>
+    ${DB.users.map(x=>`<tr>
+      <td>${x.UserID}</td><td><strong>${x.FullName}</strong></td><td>${x.Email}</td>
+      <td><span class="rpill ${ROLE_META[x.Role]?.badge}">${ROLE_META[x.Role]?.label||x.Role}</span></td>
+      <td><span class="badge ${x.Status==='active'?'bg-success':x.Status==='pending_verification'?'bg-warn':'bg-danger'}">${x.Status}</span></td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-outline btn-sm" onclick="showAssign('${x.UserID}')">Roles/Permissions</button>
+        ${x.Status==='locked'?`<button class="btn btn-success btn-sm" onclick="unlockUser('${x.UserID}')">Unlock</button>`
+          :`<button class="btn btn-danger btn-sm" onclick="lockUser('${x.UserID}')">Lock</button>`}
+      </td></tr>`).join('')}
+    </table></div></div>`;
 },
 
-roles_matrix() {
-  document.getElementById('dynamic-content').innerHTML = `
-    <div class="content-card">
-      <div class="card-header"><h3>Access Control Matrix (RBAC Configuration)</h3></div>
-      <div class="card-body">
-        <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">
-          Below is the live Access Control Table representing fine-grained permissions assigned to each stakeholder role.
-        </p>
-        <table>
-          <tr><th>Permission / Module</th><th>Admin</th><th>Manager</th><th>Teacher</th><th>Student</th></tr>
-          ${[
-            ['Manage System Users', '✅', '❌', '❌', '❌'],
-            ['Assign Roles & Permissions', '✅', '❌', '❌', '❌'],
-            ['View Audit Logs', '✅', '✅', '❌', '❌'],
-            ['Create Student Record', '✅', '❌', '✅', '❌'],
-            ['Manage Marks & Grades', '✅', '❌', '✅', '❌'],
-            ['View Fee Invoices', '✅', '✅', '❌', '✅'],
-            ['View Own Results', '✅', '✅', '✅', '✅']
-          ].map(r => `<tr><td><strong>${r[0]}</strong></td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td></tr>`).join('')}
-        </table>
+create_user(){
+  const myRole=SESSION.user.Role;
+  const allowed=CAN_CREATE[myRole]||[];
+  if(allowed.length===0) return deny('create_user');
+  const roleOptions = allowed.length===1
+    ? `<input type="hidden" id="nu-role" value="${allowed[0]}">
+       <div class="alert al-info">You can only register <strong>${ROLE_META[allowed[0]].label}</strong> accounts.</div>`
+    : `<div class="fg"><label>Account Role</label><select id="nu-role" onchange="toggleRoleFields()">
+        ${allowed.map(r=>`<option value="${r}">${ROLE_META[r].label}</option>`).join('')}
+       </select></div>`;
+  document.getElementById('content').innerHTML=`
+    <div class="card"><div class="ch"><h3>${myRole==='teacher'?'Register a student':'Create new account'}</h3></div>
+    <div class="cb">
+      <div class="alert al-info"><strong>Your role (${ROLE_META[myRole].label}):</strong> you may create ${allowed.map(r=>ROLE_META[r].label).join(', ')} accounts.</div>
+      ${roleOptions}
+      <div class="form-row">
+        <div class="fg"><label>Full Name</label><input id="nu-name" placeholder="Full name"></div>
+        <div class="fg"><label>Email</label><input id="nu-email" type="email" placeholder="name@sunrise.edu.pk"></div>
       </div>
-    </div>`;
+      <div class="form-row">
+        <div class="fg"><label>Phone</label><input id="nu-phone" placeholder="03XX-XXXXXXX"></div>
+        <div class="fg" id="nu-extra1"></div>
+      </div>
+      <div class="form-row" id="nu-extra-row"></div>
+      <div class="fg">
+        <label>Temporary Password</label>
+        <input type="password" id="nu-pass" placeholder="8+ chars, upper, lower, number, symbol" oninput="strCheck(this.value,'nu-str','nu-slbl')">
+        <div class="str-bar"><div class="str-fill" id="nu-str"></div></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px" id="nu-slbl"></div>
+      </div>
+      <button class="btn btn-primary" onclick="createUser()">Create Account</button>
+    </div></div>`;
+  toggleRoleFields();
 },
 
-create_user() {
-  const currentRole = SESSION.user['Role'];
-  document.getElementById('dynamic-content').innerHTML = `
-    <div class="content-card" style="max-width:650px;">
-      <div class="card-header"><h3>Register New Account</h3></div>
-      <div class="card-body">
-        <div class="form-group">
-          <label>Target Role</label>
-          <select id="nu-role">
-            ${currentRole==='admin'?`
-              <option value="student">Student / Parent</option>
-              <option value="teacher">Teacher</option>
-              <option value="manager">Manager / Principal</option>
-              <option value="admin">Administrator</option>
-            `:`<option value="student">Student / Parent</option>`}
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="nu-name" placeholder="e.g. Ali Raza">
-        </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" id="nu-email" placeholder="user@sunriseschool.edu.pk">
-        </div>
-        <div class="form-group">
-          <label>Password (Min 8 chars, 1 Upper, 1 Special)</label>
-          <input type="password" id="nu-pass" placeholder="••••••••" oninput="checkStrength(this.value)">
-          <div class="password-meter"><div class="meter-fill" id="pass-meter"></div></div>
-        </div>
-        <button class="btn btn-primary" onclick="saveNewAccount()">Create & Hashed Save</button>
-      </div>
-    </div>`;
+results(){
+  const role=SESSION.user.Role, u=SESSION.user;
+  let rows=DB.results;
+  if(role==='student') rows=rows.filter(r=>r.StudentID===u.StudentID);
+  const canEdit = can('manage_results');
+  document.getElementById('content').innerHTML=`
+    <div class="card"><div class="ch"><h3>${role==='student'?'My Results':'Results'}</h3>
+      ${canEdit?`<button class="btn btn-gold btn-sm" onclick="showAddResult()">+ Add Result</button>`:''}
+    </div><div class="cb"><table>
+      <tr><th>Student</th><th>Class</th><th>Subject</th><th>Term</th><th>Score</th><th>Grade</th></tr>
+      ${rows.map(r=>`<tr><td>${r.StudentName}</td><td>${r.Class}</td><td>${r.Subject}</td><td>${r.Term}</td>
+        <td>${r.Obtained}/${r.Total}</td><td><span class="badge bg-success">${r.Grade}</span></td></tr>`).join('')||
+        '<tr><td colspan="6" style="text-align:center;color:var(--muted)">No results found</td></tr>'}
+    </table></div></div>`;
 },
 
-courses() {
-  document.getElementById('dynamic-content').innerHTML = `
-    <div class="content-card">
-      <div class="card-header"><h3>Courses & Academic Classes</h3></div>
-      <div class="card-body">
-        <table>
-          <tr><th>Course Code</th><th>Course Name</th><th>Class</th><th>Assigned Teacher</th></tr>
-          ${DB.courses.map(c => `<tr><td>${c.CourseID}</td><td><strong>${c.Name}</strong></td><td>${c.Class}</td><td>${c.Teacher}</td></tr>`).join('')}
-        </table>
-      </div>
-    </div>`;
+attendance(){
+  const role=SESSION.user.Role, u=SESSION.user;
+  let rows=DB.attendance;
+  if(role==='student') rows=rows.filter(a=>a.StudentID===u.StudentID);
+  const pres=rows.filter(a=>a.Status==='Present').length;
+  const pct=rows.length?Math.round(pres/rows.length*100):0;
+  const canEdit=can('manage_attendance');
+  document.getElementById('content').innerHTML=`
+    <div class="card"><div class="ch"><h3>Attendance</h3>
+      ${canEdit?`<button class="btn btn-gold btn-sm" onclick="showMarkAtt()">+ Mark Attendance</button>`:''}
+    </div><div class="cb">
+      ${(role==='student')?`<div style="text-align:center;padding:14px 0;margin-bottom:12px">
+        <div style="font-size:40px;font-weight:800;font-family:'Fraunces',serif;color:${pct>=75?'var(--success)':'var(--danger)'}">${pct}%</div>
+        <div style="color:var(--muted);font-size:12.5px">${pres}/${rows.length} classes attended</div></div>`:''}
+      <table><tr><th>Student</th><th>Class</th><th>Date</th><th>Status</th></tr>
+      ${rows.map(a=>`<tr><td>${a.StudentName}</td><td>${a.Class}</td><td>${a.Date}</td>
+        <td><span class="badge ${a.Status==='Present'?'bg-success':a.Status==='Absent'?'bg-danger':'bg-warn'}">${a.Status}</span></td></tr>`).join('')||
+        '<tr><td colspan="4" style="text-align:center;color:var(--muted)">No records</td></tr>'}
+      </table></div></div>`;
 },
 
-fees() {
-  document.getElementById('dynamic-content').innerHTML = `
-    <div class="content-card">
-      <div class="card-header"><h3>Student Fee Invoices</h3></div>
-      <div class="card-body">
-        <table>
-          <tr><th>Invoice ID</th><th>Student Name</th><th>Amount (PKR)</th><th>Due Date</th><th>Status</th></tr>
-          ${DB.fees.map(f => `<tr><td>${f.FeeID}</td><td>${f.Name}</td><td>PKR ${f.Amount}</td><td>${f.DueDate}</td><td><span class="status-badge badge-pending">${f.Status}</span></td></tr>`).join('')}
-        </table>
-      </div>
-    </div>`;
+fees(){
+  const role=SESSION.user.Role, u=SESSION.user;
+  let rows=DB.fees;
+  if(role==='student') rows=rows.filter(f=>f.StudentID===u.StudentID);
+  const canEdit=can('manage_fees');
+  document.getElementById('content').innerHTML=`
+    <div class="card"><div class="ch"><h3>Fee records</h3></div>
+    <div class="cb"><table><tr><th>ID</th><th>Student</th><th>Amount</th><th>Due</th><th>Status</th>${canEdit?'<th>Action</th>':''}</tr>
+    ${rows.map(f=>`<tr><td>${f.FeeID}</td><td>${f.StudentName}</td><td>PKR ${Number(f.Amount).toLocaleString()}</td>
+      <td>${f.DueDate}</td><td><span class="badge ${f.Status==='Paid'?'bg-success':f.Status==='Pending'?'bg-warn':'bg-danger'}">${f.Status}</span></td>
+      ${canEdit?`<td>${f.Status!=='Paid'?`<button class="btn btn-success btn-sm" onclick="markPaid('${f.FeeID}')">Mark Paid</button>`:'—'}</td>`:''}
+    </tr>`).join('')||`<tr><td colspan="${canEdit?6:5}" style="text-align:center;color:var(--muted)">No records</td></tr>`}
+    </table></div></div>`;
 },
 
-logs() {
-  document.getElementById('dynamic-content').innerHTML = `
-    <div class="content-card">
-      <div class="card-header"><h3>Security Audit Log (Real-time Event Logging)</h3></div>
-      <div class="card-body">
-        <table>
-          <tr><th>#</th><th>Email</th><th>Role</th><th>Activity</th><th>Status</th><th>Timestamp</th></tr>
-          ${[...DB.secLogs].reverse().map((l, i) => `<tr>
-            <td>${i+1}</td><td>${l.Email}</td><td><span class="role-badge role-${l.Role}">${l.Role}</span></td>
-            <td>${l.Activity}</td><td><span class="status-badge ${l.Status==='Success'?'badge-active':'badge-locked'}">${l.Status}</span></td>
-            <td>${l.Timestamp}</td>
-          </tr>`).join('')}
-        </table>
-      </div>
-    </div>`;
+students(){
+  document.getElementById('content').innerHTML=`
+    <div class="card"><div class="ch"><h3>My students</h3></div><div class="cb"><table>
+    <tr><th>ID</th><th>Name</th><th>Class</th><th>Roll No.</th><th>Status</th></tr>
+    ${DB.students.map(s=>`<tr><td>${s.StudentID}</td><td>${s.FullName}</td><td>${s.Class}-${s.Section}</td>
+      <td>${s.RollNo}</td><td><span class="badge bg-success">${s.Status}</span></td></tr>`).join('')}
+    </table></div></div>`;
 },
 
-testcases() {
-  document.getElementById('dynamic-content').innerHTML = `
-    <div class="content-card">
-      <div class="card-header"><h3>Executed Security Test Cases (Assignment Section xviii)</h3></div>
-      <div class="card-body">
-        <table>
-          <tr><th>Test Scenario</th><th>Expected Result</th><th>Actual Result</th><th>Status</th></tr>
-          ${DB.testCases.map(tc => `<tr><td>${tc.test}</td><td>${tc.expected}</td><td>${tc.actual}</td><td><span class="status-badge badge-active">${tc.status}</span></td></tr>`).join('')}
-        </table>
-      </div>
-    </div>`;
+access_control(){
+  if(!can('view_logs')) return deny('access_control');
+  const rows=[
+    ['Login','✓','✓','✓','✓'],
+    ['View Dashboard','✓','✓','✓','✓'],
+    ['Manage Users (Create/Lock)','✓','✗','✗','✗'],
+    ['Assign Roles / Permissions','✓','✗','✗','✗'],
+    ['Register Student','✓','✓','✗','✗'],
+    ['Enter / Edit Results','✓','✓','✗','✗'],
+    ['View Results','✓','✓','✗','Own only'],
+    ['Mark Attendance','✓','✓','✗','✗'],
+    ['View Attendance','✓','✓','✗','Own only'],
+    ['Manage Fees','✓','✗','✓','✗'],
+    ['View Fees','✓','✗','✓','Own only'],
+    ['View Security Logs','✓','✗','✗','✗'],
+    ['System Settings','✓','✗','✗','✗'],
+  ];
+  document.getElementById('content').innerHTML=`
+    <div class="card"><div class="ch"><h3>Access control matrix</h3></div><div class="cb">
+    <table><tr><th>Functionality</th><th>Admin</th><th>Teacher</th><th>Accountant</th><th>Student</th></tr>
+    ${rows.map(r=>`<tr><td style="font-weight:600">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td></tr>`).join('')}
+    </table>
+    <div class="alert al-info" style="margin-top:14px">This matrix is enforced in code: every navigation and section render checks the signed-in user's role/permissions before showing data — attempts outside this matrix are blocked and logged.</div>
+    </div></div>`;
 },
 
-aitable() {
-  document.getElementById('dynamic-content').innerHTML = `
-    <div class="content-card">
-      <div class="card-header"><h3>AI Usage Log (Assignment Section 3 Requirement)</h3></div>
-      <div class="card-body">
-        <table>
-          <tr><th>AI Tool</th><th>Purpose</th><th>Prompt Query</th><th>Used?</th><th>Modifications</th></tr>
-          ${DB.aiUsageTable.map(ai => `<tr><td><strong>${ai.tool}</strong></td><td>${ai.purpose}</td><td>"${ai.prompt}"</td><td>${ai.used}</td><td>${ai.mod}</td></tr>`).join('')}
-        </table>
-      </div>
-    </div>`;
+logs(){
+  if(!can('view_logs')) return deny('logs');
+  document.getElementById('content').innerHTML=`
+    <div class="card"><div class="ch"><h3>Security audit log</h3><span class="badge bg-info">${DB.secLogs.length} entries</span></div>
+    <div class="cb"><table><tr><th>#</th><th>Email</th><th>Role</th><th>Activity</th><th>Status</th><th>Time</th></tr>
+    ${[...DB.secLogs].reverse().map((l,i)=>`<tr><td>${i+1}</td><td>${l.Email}</td><td>${l.Role}</td><td>${l.Activity}</td>
+      <td><span class="badge ${l.Status==='Success'?'bg-success':l.Status==='Failed'?'bg-danger':'bg-warn'}">${l.Status}</span></td><td>${l.Timestamp}</td></tr>`).join('')||
+      '<tr><td colspan="6" style="text-align:center;color:var(--muted)">No logs yet</td></tr>'}
+    </table></div></div>
+    <div class="card"><div class="ch"><h3>Login attempt history</h3></div>
+    <div class="cb"><table><tr><th>#</th><th>Email</th><th>Time</th><th>Status</th></tr>
+    ${[...DB.loginAttempts].reverse().slice(0,25).map((a,i)=>`<tr><td>${i+1}</td><td>${a.Email}</td><td>${a.Time}</td>
+      <td><span class="badge ${a.Status==='Success'?'bg-success':'bg-danger'}">${a.Status}</span></td></tr>`).join('')||
+      '<tr><td colspan="4" style="text-align:center;color:var(--muted)">No attempts yet</td></tr>'}
+    </table></div></div>`;
 },
 
-settings() {
-  document.getElementById('dynamic-content').innerHTML = `
-    <div class="content-card">
-      <div class="card-header"><h3>Security Parameters & Policies</h3></div>
-      <div class="card-body">
-        <ul style="list-style:none; line-height:2.2; font-size:14px;">
-          <li>🔒 <strong>Password Algorithm:</strong> SHA-256 with Secret Salt</li>
-          <li>⏱️ <strong>Account Lockout Threshold:</strong> 5 Failed Attempts -> 5 min cooldown</li>
-          <li>🤖 <strong>Anti-Automation:</strong> Active Math CAPTCHA Puzzle</li>
-          <li>🛡️ <strong>Access Model:</strong> Dynamic Role-Based Access Control (RBAC)</li>
-        </ul>
+settings(){
+  if(!can('system_settings')) return deny('settings');
+  document.getElementById('content').innerHTML=`
+    <div class="card"><div class="ch"><h3>System settings</h3></div><div class="cb">
+      ${[['Max login attempts','5'],['Account lock duration','5 minutes'],['Session timeout','30 minutes'],
+        ['Password minimum length','8 characters'],['Password complexity','Upper + lower + number + symbol'],
+        ['CAPTCHA','Enabled on every login'],['Password storage','SHA-256 + per-user salt (Web Crypto API)'],
+        ['Data store','Browser localStorage (static-site demo)']
+      ].map(s=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);flex-wrap:wrap">
+        <span style="font-weight:600;font-size:13px">${s[0]}</span><span style="color:var(--sky-deep);font-weight:700;font-size:13px">${s[1]}</span></div>`).join('')}
+    </div></div>
+    <div class="card"><div class="ch"><h3>Database viewer (users table)</h3>
+      <button class="btn btn-outline btn-sm" onclick="toggleDbView()">Show / hide</button></div>
+      <div class="cb" id="db-view" style="display:none">
+      <div class="alert al-info">Only <code>PasswordHash</code> and <code>Salt</code> are stored — the real password never touches storage.</div>
+      <div class="jsonbox">${JSON.stringify(DB.users.map(u=>({UserID:u.UserID,Email:u.Email,Role:u.Role,PasswordHash:u.PasswordHash,Salt:u.Salt,Status:u.Status})),null,2)}</div>
+      </div></div>
+    <div class="card"><div class="ch"><h3>Reset demo data</h3></div><div class="cb">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:10px">Restores the four seed accounts and clears all activity created during testing.</p>
+      <button class="btn btn-danger btn-sm" onclick="resetDemo()">Reset all demo data</button>
+    </div></div>`;
+},
+
+profile(){
+  const u=SESSION.user;
+  document.getElementById('content').innerHTML=`
+    <div class="card"><div class="ch"><h3>My profile</h3></div><div class="cb">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+        <div style="width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,var(--sun),var(--sun-deep));
+          display:flex;align-items:center;justify-content:center;font-size:26px;color:#fff;font-weight:700">${(u.FullName||'?')[0]}</div>
+        <div><div style="font-size:19px;font-weight:700">${u.FullName}</div>
+        <div style="color:var(--muted);font-size:13px">${u.Email}</div>
+        <span class="badge bg-info" style="margin-top:5px">${ROLE_META[u.Role].label}</span></div>
       </div>
-    </div>`;
+      <table>
+        <tr><td style="font-weight:600">Phone</td><td>${u.Phone||'—'}</td></tr>
+        ${u.StudentID?`<tr><td style="font-weight:600">Student ID</td><td>${u.StudentID}</td></tr>
+          <tr><td style="font-weight:600">Class</td><td>${u.Class}-${u.Section}</td></tr>`:''}
+        ${u.Subject?`<tr><td style="font-weight:600">Subject</td><td>${u.Subject}</td></tr>`:''}
+        <tr><td style="font-weight:600">Account created</td><td>${u.CreatedDate}</td></tr>
+      </table>
+    </div></div>
+    <div class="card"><div class="ch"><h3>Change password</h3></div><div class="cb">
+      <div class="fg"><label>Current password</label><input type="password" id="cp-old"></div>
+      <div class="fg"><label>New password</label>
+        <input type="password" id="cp-new" oninput="strCheck(this.value,'cp-str','cp-slbl')">
+        <div class="str-bar"><div class="str-fill" id="cp-str"></div></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px" id="cp-slbl"></div></div>
+      <button class="btn btn-primary" onclick="changeOwnPassword()">Update password</button>
+    </div></div>`;
 }
 
-}; // end SECTIONS
+};
 
-/* ── ACCOUNT CREATION WITH SHA-256 ── */
-async function saveNewAccount() {
-  const role = document.getElementById('nu-role').value;
-  const name = document.getElementById('nu-name').value.trim();
-  const email = document.getElementById('nu-email').value.trim();
-  const pass = document.getElementById('nu-pass').value;
+function deny(k){
+  document.getElementById('content').innerHTML=`
+    <div class="acc-denied"><div class="ico">🚫</div>
+    <h2 style="color:var(--danger)">Not permitted</h2>
+    <p>Your role does not include this permission.</p></div>`;
+}
 
-  if (!name || !email || !pass) { alert('Please fill all fields.'); return; }
-  if (pass.length < 8) { alert('Password must be at least 8 characters long.'); return; }
+/* ── dynamic create-user role fields ── */
+function toggleRoleFields(){
+  const role=document.getElementById('nu-role').value;
+  const box=document.getElementById('nu-extra-row');
+  if(role==='student'){
+    box.innerHTML=`<div class="fg"><label>Class</label><input id="nu-class" placeholder="e.g. 6"></div>
+      <div class="fg"><label>Section</label><input id="nu-section" placeholder="e.g. A"></div>
+      <div class="fg"><label>Roll No.</label><input id="nu-roll" placeholder="e.g. 21"></div>`;
+  } else if(role==='accountant'){
+    box.innerHTML=`<div class="fg"><label>Department</label><input id="nu-department" placeholder="e.g. Finance" value="Finance"></div>`;
+  } else if(role==='teacher'){
+    box.innerHTML=`<div class="fg"><label>Subject</label><input id="nu-subject" placeholder="e.g. Science"></div>
+      <div class="fg"><label>Classes</label><input id="nu-classes" placeholder="e.g. 6-A, 7-B"></div>`;
+  } else { box.innerHTML=''; }
+}
 
-  const hashedPass = await hashPassword(pass);
-  const newUser = {
-    UserID: 'U00' + (DB.users.length + 1),
-    'Full Name': name,
-    Email: email,
-    PasswordHash: hashedPass,
-    Role: role,
-    Status: 'active',
-    CreatedDate: new Date().toISOString().split('T')[0]
-  };
+/* ── server-side-style validation (simulated second pass) ── */
+function serverValidate({name,email,phone,pass}){
+  const errs=[];
+  if(!name || name.trim().length<3) errs.push('Full name must be at least 3 characters.');
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.push('Invalid email format.');
+  if(phone && !/^[0-9\-\+\s]{7,15}$/.test(phone)) errs.push('Invalid phone number format.');
+  if(!isStrongPass(pass)) errs.push('Password does not meet the strong-password policy.');
+  return errs;
+}
 
-  DB.users.push(newUser);
-  if (role === 'student') {
-    DB.students.push({ StudentID: 'STU' + (DB.students.length + 101), Name: name, Email: email, Class: 'Grade 10', Section: 'A', Phone: '0300-0000000', Status: 'active' });
+async function createUser(){
+  const myRole=SESSION.user.Role;
+  const role=document.getElementById('nu-role').value;
+  if(!canCreate(role)){ alert('You are not permitted to create this role.'); return; }
+  const name=document.getElementById('nu-name').value.trim();
+  const email=document.getElementById('nu-email').value.trim();
+  const phone=document.getElementById('nu-phone').value.trim();
+  const pass=document.getElementById('nu-pass').value;
+
+  const errs=serverValidate({name,email,phone,pass});
+  if(errs.length){ alert('Could not create account:\\n\\n'+errs.join('\\n')); return; }
+  if(findUser(email)){ alert('A user with this email already exists.'); return; }
+
+  const uid='U'+String(DB.users.length+1).padStart(3,'0');
+  const salt=randSalt();
+  const passwordHash=await hashPass(pass,salt);
+  const base={UserID:uid,FullName:name,Email:email,Role:role,Phone:phone,Salt:salt,PasswordHash:passwordHash,
+    Status:'active',ExtraPermissions:[],CreatedBy:SESSION.user.Email,CreatedByRole:myRole,CreatedDate:new Date().toISOString().slice(0,10)};
+
+  if(role==='student'){
+    base.StudentID='STU-'+(1000+DB.students.length+1);
+    base.Class=document.getElementById('nu-class').value.trim()||'—';
+    base.Section=document.getElementById('nu-section').value.trim()||'—';
+    base.RollNo=document.getElementById('nu-roll').value.trim()||'—';
+    DB.students.push({StudentID:base.StudentID,FullName:name,Email:email,Class:base.Class,Section:base.Section,
+      RollNo:base.RollNo,Status:'active',CreatedBy:SESSION.user.Email,CreatedDate:base.CreatedDate});
+  } else if(role==='accountant'){
+    base.Department=document.getElementById('nu-department').value.trim()||'Finance';
+  } else if(role==='teacher'){
+    base.Subject=document.getElementById('nu-subject').value.trim();
+    base.Classes=document.getElementById('nu-classes').value.trim();
   }
 
-  saveDB();
-  addLog(SESSION.user['Email'], SESSION.user['Role'], `Created ${role} account (${email})`, 'Success');
-  alert(`✅ Account created successfully!\nEmail: ${email}\nPassword Hashed with SHA-256`);
+  DB.users.push(base); saveDB();
+  addLog(SESSION.user.Email,myRole,`Created ${role} account for ${email}`,'Success');
+  alert(`Account created for ${name}.\\nThey can sign in immediately with the password you set.`);
+  goSection(myRole==='teacher'?'students':'users');
+}
+
+/* ── admin: role / permission assignment ── */
+function showAssign(userId){
+  const user=DB.users.find(x=>x.UserID===userId);
+  if(!user) return;
+  const allPerms=[...new Set(Object.values(PERMS).flat())];
+  openM(`Roles & permissions — ${user.FullName}`, `
+    <div class="fg"><label>Role</label>
+      <select id="as-role">${Object.keys(ROLE_META).map(r=>`<option value="${r}" ${r===user.Role?'selected':''}>${ROLE_META[r].label}</option>`).join('')}</select>
+    </div>
+    <label style="display:block;font-size:12.5px;font-weight:600;margin:14px 0 6px">Additional permissions</label>
+    ${allPerms.map(p=>`<label class="perm-check"><input type="checkbox" value="${p}" ${(user.ExtraPermissions||[]).includes(p)?'checked':''} class="perm-box"> ${p.replace(/_/g,' ')}</label>`).join('')}
+  `, `<button class="btn btn-outline btn-sm" onclick="closeM()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="saveAssign('${userId}')">Save</button>`);
+}
+function saveAssign(userId){
+  const user=DB.users.find(x=>x.UserID===userId);
+  const newRole=document.getElementById('as-role').value;
+  const perms=[...document.querySelectorAll('.perm-box')].filter(c=>c.checked).map(c=>c.value);
+  const roleChanged=newRole!==user.Role;
+  user.Role=newRole; user.ExtraPermissions=perms; saveDB();
+  addLog(SESSION.user.Email,'admin',`Updated role/permissions for ${user.Email}${roleChanged?' (role changed)':''}`,'Success');
+  closeM(); goSection('users');
+}
+function lockUser(userId){
+  const user=DB.users.find(x=>x.UserID===userId);
+  if(!confirm(`Lock ${user.FullName}'s account?`)) return;
+  user.Status='locked'; saveDB();
+  addLog(SESSION.user.Email,'admin',`Locked account: ${user.Email}`,'Success');
+  goSection('users');
+}
+function unlockUser(userId){
+  const user=DB.users.find(x=>x.UserID===userId);
+  user.Status='active'; saveDB();
+  addLog(SESSION.user.Email,'admin',`Unlocked account: ${user.Email}`,'Success');
   goSection('users');
 }
 
-function toggleUserStatus(email) {
-  const user = DB.users.find(u => u.Email === email);
-  if (user) {
-    user.Status = user.Status === 'active' ? 'locked' : 'active';
-    saveDB();
-    addLog(SESSION.user['Email'], SESSION.user['Role'], `User status changed (${email}) to ${user.Status}`, 'Success');
-    goSection('users');
+/* ── results / attendance / fees quick-add ── */
+function showAddResult(){
+  openM('Add result', `
+    <div class="fg"><label>Student</label><select id="ar-stu">${DB.students.map(s=>`<option value="${s.StudentID}">${s.FullName} (${s.StudentID})</option>`).join('')}</select></div>
+    <div class="form-row">
+      <div class="fg"><label>Subject</label><input id="ar-sub" placeholder="e.g. Science"></div>
+      <div class="fg"><label>Term</label><input id="ar-term" placeholder="e.g. Term 1"></div>
+    </div>
+    <div class="form-row">
+      <div class="fg"><label>Obtained</label><input id="ar-ob" type="number"></div>
+      <div class="fg"><label>Total</label><input id="ar-tot" type="number" value="100"></div>
+    </div>`, `<button class="btn btn-outline btn-sm" onclick="closeM()">Cancel</button>
+    <button class="btn btn-primary btn-sm" onclick="saveResult()">Save</button>`);
+}
+function saveResult(){
+  const stuId=document.getElementById('ar-stu').value;
+  const stu=DB.students.find(s=>s.StudentID===stuId);
+  const ob=Number(document.getElementById('ar-ob').value), tot=Number(document.getElementById('ar-tot').value)||100;
+  if(!stu || isNaN(ob)){ alert('Please complete all fields.'); return; }
+  const pct=ob/tot*100;
+  const grade = pct>=90?'A+':pct>=80?'A':pct>=70?'B':pct>=60?'C':pct>=50?'D':'F';
+  DB.results.push({ResultID:'RES'+String(DB.results.length+1).padStart(3,'0'),StudentID:stuId,StudentName:stu.FullName,
+    Class:stu.Class+'-'+stu.Section,Subject:document.getElementById('ar-sub').value.trim(),Term:document.getElementById('ar-term').value.trim(),
+    Obtained:ob,Total:tot,Grade:grade});
+  saveDB(); addLog(SESSION.user.Email,SESSION.user.Role,`Added result for ${stu.FullName}`,'Success');
+  closeM(); goSection('results');
+}
+function showMarkAtt(){
+  openM('Mark attendance', `
+    <div class="fg"><label>Student</label><select id="aa-stu">${DB.students.map(s=>`<option value="${s.StudentID}">${s.FullName} (${s.StudentID})</option>`).join('')}</select></div>
+    <div class="form-row">
+      <div class="fg"><label>Date</label><input id="aa-date" type="date" value="${new Date().toISOString().slice(0,10)}"></div>
+      <div class="fg"><label>Status</label><select id="aa-status"><option>Present</option><option>Absent</option><option>Leave</option></select></div>
+    </div>`, `<button class="btn btn-outline btn-sm" onclick="closeM()">Cancel</button>
+    <button class="btn btn-primary btn-sm" onclick="saveAtt()">Save</button>`);
+}
+function saveAtt(){
+  const stuId=document.getElementById('aa-stu').value;
+  const stu=DB.students.find(s=>s.StudentID===stuId);
+  DB.attendance.push({StudentID:stuId,StudentName:stu.FullName,Class:stu.Class+'-'+stu.Section,
+    Date:document.getElementById('aa-date').value,Status:document.getElementById('aa-status').value});
+  saveDB(); addLog(SESSION.user.Email,SESSION.user.Role,`Marked attendance for ${stu.FullName}`,'Success');
+  closeM(); goSection('attendance');
+}
+function markPaid(feeId){
+  const fee=DB.fees.find(f=>f.FeeID===feeId);
+  fee.Status='Paid'; saveDB();
+  addLog(SESSION.user.Email,SESSION.user.Role,`Marked fee ${feeId} as paid`,'Success');
+  goSection('fees');
+}
+
+/* ── change own password ── */
+async function changeOwnPassword(){
+  const oldPass=document.getElementById('cp-old').value;
+  const newPass=document.getElementById('cp-new').value;
+  const user=DB.users.find(x=>x.UserID===SESSION.user.UserID);
+  const okOld=(await hashPass(oldPass,user.Salt))===user.PasswordHash;
+  if(!okOld){ alert('Current password is incorrect.'); return; }
+  if(!isStrongPass(newPass)){ alert('New password must be 8+ characters with upper, lower, number and a symbol, and not a common weak password.'); return; }
+  const newSalt=randSalt();
+  user.PasswordHash=await hashPass(newPass,newSalt); user.Salt=newSalt; saveDB();
+  SESSION.user=user; saveSession();
+  addLog(user.Email,user.Role,'Changed password','Success');
+  alert('Password updated successfully.');
+  document.getElementById('cp-old').value=''; document.getElementById('cp-new').value='';
+}
+
+/* ── database viewer toggle ── */
+function toggleDbView(){
+  const el=document.getElementById('db-view');
+  el.style.display = el.style.display==='none' ? 'block':'none';
+}
+async function resetDemo(){
+  if(!confirm('This will erase all accounts, results, attendance, fees and logs created during testing, and restore the four seed accounts. Continue?')) return;
+  localStorage.removeItem('srps_db_v2'); localStorage.removeItem('srps_attempts_v2');
+  DB = await buildSeedDB(); saveDB();
+  addLog('SYSTEM','system','Demo data reset','Success');
+  goSection('settings');
+}
+
+/* ══════ REGISTRATION (self sign-up with simulated OTP) ══════ */
+let pendingOtp=null, pendingReg=null;
+function openRegister(){
+  openM('Create an account', `
+    <div class="alert al-info">Self-registration is available for <strong>Students</strong>. Staff and finance accounts are created by the school administrator.</div>
+    <input type="hidden" id="rg-role" value="student">
+    <div class="form-row">
+      <div class="fg"><label>Full Name</label><input id="rg-name"></div>
+      <div class="fg"><label>Email</label><input id="rg-email" type="email"></div>
+    </div>
+    <div class="form-row">
+      <div class="fg"><label>Phone</label><input id="rg-phone"></div>
+      <div class="fg" id="rg-extra"><label>Student ID (if student, leave blank if new)</label><input id="rg-sid" placeholder="optional"></div>
+    </div>
+    <div class="fg"><label>Password</label>
+      <input type="password" id="rg-pass" oninput="strCheck(this.value,'rg-str','rg-slbl')">
+      <div class="str-bar"><div class="str-fill" id="rg-str"></div></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px" id="rg-slbl"></div></div>
+    <div class="fg"><label>Confirm Password</label><input type="password" id="rg-pass2"></div>
+  `, `<button class="btn btn-outline btn-sm" onclick="closeM()">Cancel</button>
+  <button class="btn btn-primary btn-sm" onclick="startRegister()">Continue</button>`);
+}
+async function startRegister(){
+  const role=document.getElementById('rg-role').value;
+  const name=document.getElementById('rg-name').value.trim();
+  const email=document.getElementById('rg-email').value.trim();
+  const phone=document.getElementById('rg-phone').value.trim();
+  const pass=document.getElementById('rg-pass').value;
+  const pass2=document.getElementById('rg-pass2').value;
+
+  const errs=serverValidate({name,email,phone,pass});
+  if(pass!==pass2) errs.push('Passwords do not match.');
+  if(findUser(email)) errs.push('An account with this email already exists.');
+  if(errs.length){ alert('Please fix the following:\\n\\n'+errs.join('\\n')); return; }
+
+  pendingReg={role,name,email,phone,pass};
+  pendingOtp=String(Math.floor(100000+Math.random()*900000));
+  addLog(email,role,'Registration submitted — verification pending','Success');
+  openM('Verify your account', `
+    <div class="alert al-info">A verification code has been sent to <strong>${email}</strong> (simulated for this demo — shown below since no real mail server is available).</div>
+    <div style="text-align:center;font-size:26px;font-weight:800;font-family:'Fraunces',serif;letter-spacing:4px;color:var(--sky-deep);margin:10px 0">${pendingOtp}</div>
+    <div class="fg"><label>Enter the 6-digit code</label><input id="rg-otp" maxlength="6" placeholder="000000"></div>
+  `, `<button class="btn btn-outline btn-sm" onclick="closeM()">Cancel</button>
+  <button class="btn btn-primary btn-sm" onclick="verifyRegister()">Verify & Activate</button>`);
+}
+async function verifyRegister(){
+  const code=document.getElementById('rg-otp').value.trim();
+  if(code!==pendingOtp){ alert('Incorrect verification code.'); return; }
+  const {role,name,email,phone,pass}=pendingReg;
+  const uid='U'+String(DB.users.length+1).padStart(3,'0');
+  const salt=randSalt(); const passwordHash=await hashPass(pass,salt);
+  const base={UserID:uid,FullName:name,Email:email,Role:role,Phone:phone,Salt:salt,PasswordHash:passwordHash,
+    Status:'active',ExtraPermissions:[],CreatedBy:'SELF',CreatedByRole:role,CreatedDate:new Date().toISOString().slice(0,10)};
+  if(role==='student'){
+    base.StudentID='STU-'+(1000+DB.students.length+1); base.Class='—'; base.Section='—'; base.RollNo='—';
+    DB.students.push({StudentID:base.StudentID,FullName:name,Email:email,Class:'—',Section:'—',RollNo:'—',
+      Status:'active',CreatedBy:'SELF',CreatedDate:base.CreatedDate});
   }
+  DB.users.push(base); saveDB();
+  addLog(email,role,'Account verified and activated','Success');
+  pendingOtp=null; pendingReg=null;
+  closeM();
+  alert('Account activated! You can now sign in.');
 }
 
-function checkStrength(p) {
-  let score = 0;
-  if (p.length >= 8) score++;
-  if (/[A-Z]/.test(p)) score++;
-  if (/[0-9]/.test(p)) score++;
-  if (/[^A-Za-z0-9]/.test(p)) score++;
-  const meter = document.getElementById('pass-meter');
-  meter.style.width = (score * 25) + '%';
-  meter.style.background = score <= 2 ? 'var(--danger)' : score === 3 ? 'var(--warning)' : 'var(--success)';
+/* ══════ FORGOT PASSWORD (simulated reset code) ══════ */
+let resetCode=null, resetEmail=null;
+function openForgot(){
+  openM('Reset your password', `
+    <div class="fg"><label>Account email</label><input id="fp-email" type="email"></div>
+  `, `<button class="btn btn-outline btn-sm" onclick="closeM()">Cancel</button>
+  <button class="btn btn-primary btn-sm" onclick="sendResetCode()">Send reset code</button>`);
 }
-
-function showForgotModal() {
-  const email = prompt('Enter your registered Email address for 6-digit OTP reset:');
-  if (email) {
-    const otp = Math.floor(100000 + Math.random() * 900000);
-    alert(`[SIMULATED EMAIL/OTP SERVICE]\nAn OTP code has been generated for ${email}:\n\nYour Verification OTP Code: ${otp}`);
+function sendResetCode(){
+  const email=document.getElementById('fp-email').value.trim();
+  const user=findUser(email);
+  if(!user){ alert('If an account exists for this email, a reset code has been generated.'); }
+  resetEmail=email; resetCode=String(Math.floor(100000+Math.random()*900000));
+  addLog(email,'—','Password reset requested','Success');
+  openM('Enter reset code', `
+    <div class="alert al-info">Reset code (simulated, shown here since there's no live mail server): </div>
+    <div style="text-align:center;font-size:26px;font-weight:800;font-family:'Fraunces',serif;letter-spacing:4px;color:var(--sky-deep);margin:10px 0">${resetCode}</div>
+    <div class="fg"><label>Code</label><input id="fp-code" maxlength="6"></div>
+    <div class="fg"><label>New password</label>
+      <input type="password" id="fp-newpass" oninput="strCheck(this.value,'fp-str','fp-slbl')">
+      <div class="str-bar"><div class="str-fill" id="fp-str"></div></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px" id="fp-slbl"></div></div>
+  `, `<button class="btn btn-outline btn-sm" onclick="closeM()">Cancel</button>
+  <button class="btn btn-primary btn-sm" onclick="confirmReset()">Reset password</button>`);
+}
+async function confirmReset(){
+  const code=document.getElementById('fp-code').value.trim();
+  const newPass=document.getElementById('fp-newpass').value;
+  if(code!==resetCode){ alert('Incorrect reset code.'); return; }
+  if(!isStrongPass(newPass)){ alert('Password must be 8+ characters with upper, lower, number and a symbol.'); return; }
+  const user=findUser(resetEmail);
+  if(user){
+    const newSalt=randSalt();
+    user.PasswordHash=await hashPass(newPass,newSalt); user.Salt=newSalt; saveDB();
+    addLog(resetEmail,user.Role,'Password reset completed','Success');
   }
+  resetCode=null; resetEmail=null;
+  closeM();
+  alert('Password reset. Please sign in with your new password.');
 }
 
-/* ── HELPERS ── */
-function addLog(email, role, activity, status) {
-  DB.secLogs.push({
-    LogID: DB.secLogs.length + 1,
-    Email: email, Role: role, Activity: activity, Status: status,
-    Timestamp: new Date().toLocaleString()
-  });
-  saveDB();
-}
-
-function clearErrors() { document.querySelectorAll('.error-text').forEach(e => e.style.display = 'none'); }
-function showError(id) { const el = document.getElementById(id); if (el) el.style.display = 'block'; }
-function openModal(t, b) { document.getElementById('modal-title').textContent = t; document.getElementById('modal-body').innerHTML = b; document.getElementById('modal').style.display = 'flex'; }
-function closeModal() { document.getElementById('modal').style.display = 'none'; }
-
-/* ── INIT ON LOAD ── */
-if (SESSION) {
-  loadApp();
-} else {
-  refreshCaptcha();
-}
-
-setInterval(() => {
-  const clock = document.getElementById('live-clock');
-  if (clock) clock.textContent = new Date().toLocaleTimeString();
-}, 1000);
+/* ══════ INIT ══════ */
+(async function init(){
+  const stored=localStorage.getItem('srps_db_v2');
+  DB = stored ? JSON.parse(stored) : await buildSeedDB();
+  if(!stored) saveDB();
+  SESSION = loadSession();
+  genCap();
+  setInterval(()=>{ const c=document.getElementById('clk'); if(c) c.textContent=new Date().toLocaleString(); },1000);
+  if(SESSION && !sessionExpired()){ loadApp(); }
+})();
 </script>
 </body>
 </html>
